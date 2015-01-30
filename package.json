@@ -1,0 +1,22 @@
+{
+  "name": "jira-terminal",
+  "version": "0.0.0",
+  "description": "Easy shortcuts in terminal to work with jira",
+  "main": "app.js",
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "jira": "^0.9.2",
+    "lodash": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "jira",
+    "terminal",
+    "nodejs"
+  ],
+  "author": "Pouja",
+  "license": "MIT"
+}
