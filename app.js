@@ -1,11 +1,10 @@
 var Jira = require('jira').JiraApi;
-var Table = require('cli-table');
 var _ = require('lodash');
 var debug = require('debug')('jira-terminal');
 var debugErr = require('debug')('jira-terminal:error');
 var q = require('q');
 var fs = require('fs');
-
+var argv = require('minimist')(process.argv.slice(2));
 var config = {};
 
 var loadConfig = function() {
@@ -26,29 +25,15 @@ var loadConfig = function() {
 var jira = new Jira(config.protocol, config.host, config.port, config.username, 
     config.password, config.apiVersion || 2);
 
-// get parameters
-// on: filter ID
-jira.getFavourites(function(err, result){
-    if(err) {
-        debugErr(err);
-    }
-    jira.requestRef(result[0].searchUrl, function(err, result){
-        makeTable(result);      
-    });
+// Load all plugins.
+var plugins = _.map(config.plugins, function(plugin) {
+    var constr = require('./plugins/' + plugin + '.js');
+    debug('Loaded plugin: ' + plugin);
+    return new constr(jira);
 });
 
-function makeTable(result){
-    var table = new Table({
-        head: ['id', 'summary', 'issuetype', 'status', 'link'],
-    });
-    _.each(result.issues, function(issue){
-        table.push([
-            issue.id,
-            issue.fields.summary,
-            issue.fields.issuetype.name,
-            issue.fields.status.name,
-            issue.self         
-        ]);
-    });
-    console.log(table.toString());    
-}
+_.each(plugins, function(plugin){
+    if(plugin.pattern.test(argv._[0])) {
+        plugin.hook(argv);
+    }
+});
