@@ -33,7 +33,7 @@ var plugins = _.map(config.plugins, function(plugin) {
 });
 
 _.each(plugins, function(plugin){
-    if(plugin.pattern.test(argv._[0])) {
+    if(plugin.pattern === argv._[0]) {
         plugin.hook(argv);
     }
 });
