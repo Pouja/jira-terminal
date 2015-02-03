@@ -13,3 +13,10 @@ jira new PROJECT SUMMARY
 next step:
 
 let users define which columsn they want
+
+
+TODO
+    implement one time config setup
+    implement sorting and filter on tables
+    implement auto complete
+    implement help

@@ -1,15 +1,19 @@
 var _ = require('lodash');
 var Table = require('cli-table');
+var Q = require('q');
+var debug = require('debug')('plugin:Filter');
+var debugErr = require('debug')('plugin:Filter:error');
 
 module.exports = function(jiraApi) {
     var self = {};
+    self.name = 'Filter';
     self.pattern = 'filter';
 
     self.hook = function(arguments) {
-        if (arguments._[1] === 'getAll') {
-            self.getFilters();
+        if (arguments._[1] === 'all') {
+            return self.getFilters();
         } else {
-            self.getIssues(arguments._[1]);
+            return self.getIssues(arguments._[1]);
         }
     }
 
@@ -17,14 +21,16 @@ module.exports = function(jiraApi) {
      * main start point
      */
     self.getIssues = function(filterId) {
+        var deferred = Q.defer();
         filterId = filterId + '';
 
         function makeTable(result) {
-            var table = new Table({
+            var table = {
                 head: ['id', 'summary', 'issuetype', 'status', 'link'],
-            });
+                rows: []
+            }
             _.each(result.issues, function(issue) {
-                table.push([
+                table.rows.push([
                     issue.id,
                     issue.fields.summary,
                     issue.fields.issuetype.name,
@@ -32,44 +38,58 @@ module.exports = function(jiraApi) {
                     issue.self
                 ]);
             });
-            console.log(table.toString());
+            return table;
         }
 
-        jiraApi.getFavourites(function(err, result) {
-            var issue = _.find(result, {
-                id: filterId
-            });
-            if (!issue) {
-                console.error('Could not find any filter with id: ' + filterId + '.');
-            } else {
-                jiraApi.requestRef(issue.searchUrl, function(err, result) {
-                    makeTable(result);
+        Q.ninvoke(jiraApi, 'getFavourites')
+            .then(function(favourites) {
+                var issue = _.find(favourites, {
+                    id: filterId
                 });
-            }
-        });
+                if (!issue) {
+                    debugErr('Could not find any filter with id: ' + filterId + '.');
+                    throw '';
+                } else {
+                    return Q.ninvoke(jiraApi, 'requestRef', issue.searchUrl);
+                };
+            })
+            .then(function(issues) {
+                deferred.resolve(makeTable(issues));
+            }, deferred.reject)
+            .done();
+
+        return deferred.promise;
     }
 
     self.getFilters = function() {
-        function makeTable(filters) {
-            var table = new Table({
-                head: ['id', 'name'],
-            });
-            _.each(filters, function(filter) {
-                table.push([filter.id, filter.name]);
-            });
-            console.log(table.toString());
+        var deferred = Q.defer();
+
+        var table = {
+            head: ['id', 'name'],
+            rows: []
         }
 
         var filters = [];
-        jiraApi.getFavourites(function(err, results) {
-            filters = results.map(function(filter) {
-                return {
-                    id: filter.id,
-                    name: filter.name
-                };
-            });
-            makeTable(filters);
-        });
+
+        Q.ninvoke(jiraApi, 'getFavourites')
+            .then(function(results) {
+                filters = results.map(function(filter) {
+                    return {
+                        id: filter.id,
+                        name: filter.name
+                    };
+                });
+                _.each(filters, function(filter) {
+                    table.rows.push([filter.id, filter.name]);
+                });
+                deferred.resolve(table);
+            }, function(err) {
+                debugErr("Failed to request to get all the favourites.");
+                deferred.reject();
+            })
+            .done();
+
+        return deferred.promise;
     }
 
     return self;
