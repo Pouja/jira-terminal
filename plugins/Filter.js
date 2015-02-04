@@ -1,14 +1,23 @@
 var _ = require('lodash');
-var Table = require('cli-table');
 var Q = require('q');
 var debug = require('debug')('plugin:Filter');
 var debugErr = require('debug')('plugin:Filter:error');
 
+/**
+* The filter plugin.
+* @param {Object} The Jira Api as defined by the library jira.
+*/
 module.exports = function(jiraApi) {
-    var self = {};
-    self.name = 'Filter';
-    self.pattern = 'filter';
-
+    var self = {
+        name: 'Filter',
+        pattern: 'filter'
+    };
+    
+    /**
+    * The main point.
+    * @param {Object} arguments The arguments object as initialized by the library minimist
+    * @return {Object} Q.promise
+    */
     self.hook = function(arguments) {
         if (arguments._[1] === 'all') {
             return self.getFilters();
@@ -18,8 +27,10 @@ module.exports = function(jiraApi) {
     }
 
     /**
-     * main start point
-     */
+    * Retrievess all the issue that match the filter id.
+    * @param {Number} filterId The filter id.
+    * @return {Object} Q.promise.
+    */
     self.getIssues = function(filterId) {
         var deferred = Q.defer();
         filterId = filterId + '';
@@ -61,6 +72,10 @@ module.exports = function(jiraApi) {
         return deferred.promise;
     }
 
+    /**
+    * Get all the filter ids.
+    * @return {Object} Q.promise.
+    */
     self.getFilters = function() {
         var deferred = Q.defer();
 
