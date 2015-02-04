@@ -86,7 +86,7 @@ if (plugin) {
     debug("Matched " + argv._[0] + " with plugin " + plugin.name + ".");
     plugin.hook(argv)
         .then(function(table) {
-            if (table.head && table.rows) {
+            if (table.head || table.rows) {
                 if (!table.sort && argv.t !== undefined) {
                     sort(table, argv.t);
                 }
@@ -94,9 +94,9 @@ if (plugin) {
                     filter(table, argv.f);
                 }
 
-                var asciiTable = new CliTable({
+                var asciiTable = (table.head) ? new CliTable({
                     head: table.head
-                });
+                }) : new CliTable({colWidths:[10,150]});
                 _.each(table.rows, function(row) {
                     asciiTable.push(row);
                 });
