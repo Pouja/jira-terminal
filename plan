@@ -1,10 +1,9 @@
 plan:
 
-jira filter ID --- opens all issues that match the filter on that ID
-jira issue ID --- opens the issue that match the given ID
+jira issue get ID --- opens the issue that match the given ID
 jira search "jql" --- performs a search with the given jql syntax
-jira start ID --- assigns the current user to the user and sets the issue on 'On Progress'
-jira resolve STATUS MSG --- closses the issue with the given status and message
+jira issue start ID --- assigns the current user to the user and sets the issue on 'On Progress'
+jira issue resolve ID STATUS MSG --- closses the issue with the given status and message
 jira issues STATUSSES --- opens all issues that are assigned to the current user and matches the given statusses
 jira new PROJECT SUMMARY
     - DESCRIPTION
@@ -17,6 +16,6 @@ let users define which columsn they want
 
 TODO
     implement one time config setup
-    implement sorting and filter on tables
     implement auto complete
     implement help
+    add grunt for building and such
