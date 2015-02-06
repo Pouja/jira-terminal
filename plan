@@ -18,3 +18,10 @@ TODO
     implement auto complete
     implement help
     add grunt for building and such
+
+    return {
+        required: [{text:'id'},{value:'-i', text:'the i flag'}],
+        pattern: //,
+        hook: function(){},
+        help: function(){},
+    }

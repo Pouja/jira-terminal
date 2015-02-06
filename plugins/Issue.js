@@ -76,15 +76,71 @@ module.exports = function(jiraApi) {
         return deferred.promise;
     }
 
+    /**
+     * Starts an issue based on the transition.
+     * @param {Object} arguments The object as returned by the library minimist/
+     * @return {Q}
+     */
     self.startHandler = function(arguments) {
         var id = arguments._[2];
         var deferred = Q.defer();
+
+        if (!id) {
+            console.error("The ID must be supplied.");
+            deferred.reject();
+            return deferred;
+        }
+
         Q.ninvoke(jiraApi, 'getCurrentUser')
             .then(function(currentUser) {
                 return Q.ninvoke(jiraApi, 'transitionIssue', id, {
                     transition: {
                         id: 4
-                    }                   
+                    }
+                });
+            })
+            .then(function() {
+                console.log("Succesfull update issue " + id + ".");
+                deferred.resolve();
+            }, function(err) {
+                console.error(err);
+                deferred.reject();
+            });
+        return deferred;
+    }
+
+    /**
+     * Called by 'issue stop ID STATUS MSG'.
+     * @param {Object} arguments The object as returned by the library minimist/
+     * @return {Q}
+     */
+    self.stopHandler = function(arguments) {
+        var deferred = Q.defer();
+
+        var id = arguments._[2];
+        var status = arguments._[3];
+        var message = arguments._[4];
+
+        if (!status || !id || !message) {
+            console.error("You must supply the id, status and message, in that order.");
+            deferred.reject();
+            return deferred;
+        }
+
+        Q.ninvoke(jiraApi, 'getCurrentUser')
+            .then(function(currentUser) {
+                return Q.ninvoke(jiraApi, 'transitionIssue', id, {
+                    transition: {
+                        id: 5
+                    },
+                    resolution: {
+                        name: status
+                    },
+                    comment: [{
+                        add: {
+                            body: message
+                        }
+                    }]
                 });
             })
             .then(function() {
