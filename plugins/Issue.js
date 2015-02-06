@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Q = require('q');
 var debug = require('debug')('plugin:Issue');
 var debugErr = require('debug')('plugin:Issue:error');
+var Util = require('../Util.js');
 
 module.exports = function(jiraApi) {
     var self = {
@@ -38,26 +39,24 @@ module.exports = function(jiraApi) {
                 }, {
                     'reporter': issue.fields.reporter.name
                 }, {
-                    'descrip tion': issue.fields.description.replace(/\\"/g, '"')
-                }, {
-                    '':''
-                }, {
+                    'description': Util.setLinebreaks(Util.cleanSentence(issue.fields.description), 40)
+                },{
                     'status': issue.fields.status.name
                 }, {
                     'project': issue.fields.project.name
                 }, {
-                    'assignee': issue.fields.assignee.name
+                    'assignee': (issue.fields.assignee) ? issue.fields.assignee.name : ''
                 }],
                 filter: false,
                 sort: false,
-                head: false
+                head: false,
             };
-
         }
 
         Q.ninvoke(jiraApi, 'findIssue', id)
             .then(function(issue) {
-                deferred.resolve(makeTable(issue));
+                Util.createAsciiTable(makeTable(issue));
+                deferred.resolve();
             }, function(err) {
                 console.error(err);
                 deferred.reject();
