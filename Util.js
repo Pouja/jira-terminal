@@ -48,6 +48,13 @@ module.exports = function() {
         }
     }
 
+    /**
+    * Removes line breaks and escapes.
+    * Currenlty this fucks up the table layout.
+    * TODO make sure that line breaks dont fuck up the layout.
+    * @param {String} The sentece to be filtered.
+    * @return {String} the sentences but cleaned.
+    */
     self.cleanSentence = function(sentence) {
         return sentence.replace(/\'|\r|\n/g, '');
     }
@@ -75,6 +82,13 @@ module.exports = function() {
         return sentences.join();
     }
 
+    /**
+    * Creates an Ascii Table based on the library Cli-Table (yes i know the names are conflicting).
+    * @param {Array} table.rows The rows to be added to the table.
+    * @param {Array} table.head (Optional) The headers of each column.
+    * @param {Boolean} table.sort (Optional) Default true. Indicate if it should sort if the argument is given.
+    * @param {Boolean} table.filter (Optional) Default true. Indicate if it should filter if the argument is given.
+    */
     self.createAsciiTable = function(table) {
         if (table.head || table.rows) {
             if (!table.sort && argv.t !== undefined) {
