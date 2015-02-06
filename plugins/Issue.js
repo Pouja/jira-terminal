@@ -10,6 +10,11 @@ module.exports = function(jiraApi) {
         pattern: 'issue'
     };
 
+    /**
+    * Main point of the plugin.
+    * @param {Object} arguments The object as returned by the library minimist/
+    * @return {Q}
+    */
     self.hook = function(arguments) {
         var call = arguments._[1];
         var deferred = Q.defer();
@@ -24,6 +29,11 @@ module.exports = function(jiraApi) {
         return deferred.promise;
     }
 
+    /**
+    * Callend for 'issue get ID'
+    * @param {Object} arguments The object as returned by the library minimist/
+    * @return {Q}
+    */
     self.getHandler = function(arguments) {
         var id = arguments._[2];
         var deferred = Q.defer();
@@ -39,6 +49,7 @@ module.exports = function(jiraApi) {
                 }, {
                     'reporter': issue.fields.reporter.name
                 }, {
+                    // Descriptions can be way too long and contain linebreaks, tabs etc, so break it and clean.
                     'description': Util.setLinebreaks(Util.cleanSentence(issue.fields.description), 40)
                 },{
                     'status': issue.fields.status.name
