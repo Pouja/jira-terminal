@@ -2,6 +2,7 @@ var _ = require('lodash');
 var Q = require('q');
 var debug = require('debug')('plugin:Filter');
 var debugErr = require('debug')('plugin:Filter:error');
+var Util = require('../Util.js');
 
 /**
 * The filter plugin.
@@ -65,7 +66,8 @@ module.exports = function(jiraApi) {
                 };
             })
             .then(function(issues) {
-                deferred.resolve(makeTable(issues));
+                Util.createAsciiTable(makeTable(issues));
+                deferred.resolve();
             }, deferred.reject)
             .done();
 
@@ -97,7 +99,8 @@ module.exports = function(jiraApi) {
                 _.each(filters, function(filter) {
                     table.rows.push([filter.id, filter.name]);
                 });
-                deferred.resolve(table);
+                Util.createAsciiTable(table);
+                deferred.resolve();
             }, function(err) {
                 debugErr("Failed to request to get all the favourites.");
                 deferred.reject();

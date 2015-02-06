@@ -34,84 +34,14 @@ var plugins = _.map(config.plugins, function(plugin) {
     return new constr(jira);
 });
 
-/**
- * Sorts the table rows on the given col name.
- * @param {Array} table.head The header names of the table.
- * @param {Array} table.rows The rows.
- * @param {String} columnName The column name (duh!).
- */
-var sort = function(table, columnName) {
-    var colNumber = _.findIndex(table.head, function(h) {
-        return h.toLowerCase() === columnName.toLowerCase();
-    });
-    if (colNumber !== -1) {
-        table.rows = _.sortBy(table.rows, function(row) {
-            return row[colNumber];
-        });
-    }
-}
-
-/**
- * Filters the row(s) on the given string.
- * @param {Array} table.head The header names of the table.
- * @param {Array} table.rows The rows.
- * @param {String} filter The filter in the form of 'column:needle' or just 'needle'.
- */
-var filter = function(table, filter) {
-    if (~filter.indexOf(':')) {
-        var columnName = filter.split(':')[0];
-        var needle = filter.split(':')[1].toLowerCase();
-        var colNumber = _.findIndex(table.head, function(h) {
-            return h.toLowerCase() === columnName.toLowerCase();
-        });
-        if (colNumber !== -1) {
-            table.rows = _.filter(table.rows, function(row) {
-                return ~row[colNumber].toLowerCase().indexOf(needle);
-            });
-        }
-    } else {
-        table.rows = _.filter(table.rows, function(row){
-            return _.filter(row, function(entry){
-                return ~entry.toLowerCase().indexOf(filter.toLowerCase());
-            });
-        });
-    }
-}
-
+// Get the plugin based on the first argument
 var plugin = _.find(plugins, {
     pattern: argv._[0]
 });
 
 if (plugin) {
-    debug("Matched " + argv._[0] + " with plugin " + plugin.name + ".");
-    plugin.hook(argv)
-        .then(function(table) {
-            if (table.head || table.rows) {
-                if (!table.sort && argv.t !== undefined) {
-                    sort(table, argv.t);
-                }
-                if (!table.filter && argv.f) {
-                    filter(table, argv.f);
-                }
-
-                var asciiTable = (table.head) ? new CliTable({
-                    head: table.head
-                }) : new CliTable({colWidths:[10,150]});
-                _.each(table.rows, function(row) {
-                    asciiTable.push(row);
-                });
-
-                console.log(asciiTable.toString());
-            }
-        }, function(err) {
-            console.error("Error occured when executing the hook for the plugin " + plugin.name + ".");
-
-            if (err) {
-                console.error("This was the error message returned: ");
-                console.error(err);
-            }
-        })
-        .done();
+    debug("Invoking hook of the plugin " + plugin.name + ".");
+    plugin.hook(argv);
 } else {
     console.error("Did not find a plugin that matches: " + argv._[0]);
 }
