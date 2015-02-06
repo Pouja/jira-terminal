@@ -1,6 +1,5 @@
 plan:
 
-jira issue get ID --- opens the issue that match the given ID
 jira search "jql" --- performs a search with the given jql syntax
 jira issue start ID --- assigns the current user to the user and sets the issue on 'On Progress'
 jira issue resolve ID STATUS MSG --- closses the issue with the given status and message
