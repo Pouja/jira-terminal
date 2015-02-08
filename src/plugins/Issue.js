@@ -52,7 +52,7 @@ module.exports = function(jiraApi, argv) {
                     // Descriptions can be way too long and contain linebreaks, tabs etc, so break it and clean.
                     'description': Util.setLinebreaks(Util.cleanSentence(issue.fields.description), 40)
                 }, {
-                    'status': issue.fields.status.id
+                    'status': issue.fields.status.name
                 }, {
                     'project': issue.fields.project.name
                 }, {
@@ -81,13 +81,13 @@ module.exports = function(jiraApi, argv) {
      * @return {Q}
      */
     self.startHandler = function() {
-        var id = argv._[2];
+        var id = argv.i || argv._[2];
         var deferred = Q.defer();
 
         if (!id) {
-            console.error('The ID must be supplied.');
+            Util.error('The ID (-i | 2nd argument) must be supplied.');
             deferred.reject();
-            return deferred;
+            return deferred.promise;
         }
 
         Q.ninvoke(jiraApi, 'transitionIssue', id, {
@@ -96,30 +96,30 @@ module.exports = function(jiraApi, argv) {
             }
         })
             .then(function() {
-                console.log(NodeUtil.format('Succesfull update issue %s', id));
+                Util.log(NodeUtil.format('Succesfull update issue %s', id));
                 deferred.resolve();
             }, function(err) {
-                console.error(NodeUtil.format('Error starting the issue %s. The error that was retrieved is %j', id, err));
+                Util.error(NodeUtil.format('Error starting the issue %s. The error that was retrieved is %j', id, err));
                 deferred.reject();
             });
-        return deferred;
+        return deferred.promise;
     };
 
     /**
-     * Called by 'issue stop ID STATUS MSG'.
+     * Called by 'issue stop -i ID -s STATUS -m MSG'.
      * @return {Q}
      */
     self.stopHandler = function() {
         var deferred = Q.defer();
 
-        var id = argv._[2];
-        var status = argv._[3];
-        var message = argv._[4];
+        var id = argv.i || argv._[2];
+        var status = argv.s;
+        var message = argv.m;
 
         if (!status || !id || !message) {
-            console.error('You must supply the id, status and message, in that order.');
+            Util.error('You must supply the id (-i | 2nd argument), status (-s) and message (-m).');
             deferred.reject();
-            return deferred;
+            return deferred.promise;
         }
 
         Q.ninvoke(jiraApi, 'transitionIssue', id, {
@@ -136,13 +136,13 @@ module.exports = function(jiraApi, argv) {
             }]
         })
             .then(function() {
-                console.log(NodeUtil.format('Succesfull update issue %s.', id));
+                Util.log(NodeUtil.format('Succesfull update issue %s.', id));
                 deferred.resolve();
             }, function(err) {
-                console.error(NodeUtil.format('Error stopping the issue %s. The error that was retrieved is %j', id, err));
+                Util.error(NodeUtil.format('Error stopping the issue %s. The error that was retrieved is %j', id, err));
                 deferred.reject();
             });
-        return deferred;
+        return deferred.promise;
     };
 
     return self;
