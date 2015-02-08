@@ -4,11 +4,15 @@ var debug = require('debug')('plugin:Filter');
 var debugErr = require('debug')('plugin:Filter:error');
 var Util = require('../Util.js');
 var NodeUtil = require('util');
+
 /**
 * The filter plugin.
 * @param {Object} The Jira Api as defined by the library jira.
 */
-module.exports = function(jiraApi) {
+module.exports = function(jiraApi, argv) {
+    // This is done in such a way, so that we can test this.
+    argv = argv || require('minimist')(process.argv.slice(2));
+    
     var self = {
         name: 'Filter',
         pattern: 'filter'
@@ -16,14 +20,13 @@ module.exports = function(jiraApi) {
     
     /**
     * The main point.
-    * @param {Object} arguments The arguments object as initialized by the library minimist
     * @return {Object} Q.promise
     */
-    self.hook = function(arguments) {
-        if (arguments._[1] === 'all') {
+    self.hook = function() {
+        if (argv._[1] === 'all') {
             return self.getFilters();
         } else {
-            return self.getIssues(arguments._[1]);
+            return self.getIssues(argv._[1]);
         }
     }
 
