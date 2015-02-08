@@ -6,7 +6,6 @@ var q = require('q');
 var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 var CliTable = require('cli-table');
-
 var config = {};
 
 var loadConfig = function() {

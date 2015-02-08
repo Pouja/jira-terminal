@@ -3,8 +3,12 @@ var Q = require('q');
 var debug = require('debug')('plugin:Issue');
 var debugErr = require('debug')('plugin:Issue:error');
 var Util = require('../Util.js');
+var NodeUtil = require('util');
 
-module.exports = function(jiraApi) {
+module.exports = function(jiraApi, argv) {
+    // This is done in such a way, so that we can test this.
+    argv = argv || require('minimist')(process.argv.slice(2));
+    
     var self = {
         name: 'Issue',
         pattern: 'issue'
@@ -12,17 +16,16 @@ module.exports = function(jiraApi) {
 
     /**
      * Main point of the plugin.
-     * @param {Object} arguments The object as returned by the library minimist/
      * @return {Q}
      */
-    self.hook = function(arguments) {
-        var call = arguments._[1];
+    self.hook = function() {
+        var call = argv._[1];
         var deferred = Q.defer();
 
         if (self[call + 'Handler']) {
-            return self[call + 'Handler'](arguments);
+            return self[call + 'Handler']();
         } else {
-            debugErr('Unknown issue command ' + call + '.');
+            debugErr(NodeUtil.format('Unknown issue command %s.', call));
             deferred.reject();
         }
 
@@ -31,11 +34,10 @@ module.exports = function(jiraApi) {
 
     /**
      * Callend for 'issue get ID'
-     * @param {Object} arguments The object as returned by the library minimist/
      * @return {Q}
      */
-    self.getHandler = function(arguments) {
-        var id = arguments._[2];
+    self.getHandler = function() {
+        var id = argv._[2];
         var deferred = Q.defer();
 
         function makeTable(issue) {
@@ -69,7 +71,7 @@ module.exports = function(jiraApi) {
                 Util.createAsciiTable(makeTable(issue));
                 deferred.resolve();
             }, function(err) {
-                console.error(err);
+                console.error(NodeUtil('Error retrieving the information for issue %s.\n Error says %j', id, err));
                 deferred.reject();
             })
             .done();
@@ -78,15 +80,14 @@ module.exports = function(jiraApi) {
 
     /**
      * Starts an issue based on the transition.
-     * @param {Object} arguments The object as returned by the library minimist/
      * @return {Q}
      */
-    self.startHandler = function(arguments) {
-        var id = arguments._[2];
+    self.startHandler = function() {
+        var id = argv._[2];
         var deferred = Q.defer();
 
         if (!id) {
-            console.error("The ID must be supplied.");
+            console.error('The ID must be supplied.');
             deferred.reject();
             return deferred;
         }
@@ -100,10 +101,10 @@ module.exports = function(jiraApi) {
                 });
             })
             .then(function() {
-                console.log("Succesfull update issue " + id + ".");
+                console.log(NodeUtil.format('Succesfull update issue %s', id));
                 deferred.resolve();
             }, function(err) {
-                console.error(err);
+                console.error(NodeUtil.format('Error starting the issue %s. The error that was retrieved is %j', id, err));
                 deferred.reject();
             });
         return deferred;
@@ -111,18 +112,17 @@ module.exports = function(jiraApi) {
 
     /**
      * Called by 'issue stop ID STATUS MSG'.
-     * @param {Object} arguments The object as returned by the library minimist/
      * @return {Q}
      */
-    self.stopHandler = function(arguments) {
+    self.stopHandler = function() {
         var deferred = Q.defer();
 
-        var id = arguments._[2];
-        var status = arguments._[3];
-        var message = arguments._[4];
+        var id = argv._[2];
+        var status = argv._[3];
+        var message = argv._[4];
 
         if (!status || !id || !message) {
-            console.error("You must supply the id, status and message, in that order.");
+            console.error('You must supply the id, status and message, in that order.');
             deferred.reject();
             return deferred;
         }
@@ -144,10 +144,10 @@ module.exports = function(jiraApi) {
                 });
             })
             .then(function() {
-                console.log("Succesfull update issue " + id + ".");
+                console.log(NodeUtil.format('Succesfull update issue %s.', id));
                 deferred.resolve();
             }, function(err) {
-                console.error(err);
+                console.error(NodeUtil.format('Error stopping the issue %s. The error that was retrieved is %j', id, err));
                 deferred.reject();
             });
         return deferred;
