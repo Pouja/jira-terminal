@@ -1,8 +1,6 @@
 plan:
 
 jira search "jql" --- performs a search with the given jql syntax
-jira issue start ID --- assigns the current user to the user and sets the issue on 'On Progress'
-jira issue resolve ID STATUS MSG --- closses the issue with the given status and message
 jira issues STATUSSES --- opens all issues that are assigned to the current user and matches the given statusses
 jira new PROJECT SUMMARY
     - DESCRIPTION
@@ -18,10 +16,3 @@ TODO
     implement auto complete
     implement help
     add grunt for building and such
-
-    return {
-        required: [{text:'id'},{value:'-i', text:'the i flag'}],
-        pattern: //,
-        hook: function(){},
-        help: function(){},
-    }

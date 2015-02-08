@@ -3,7 +3,7 @@ var Q = require('q');
 var debug = require('debug')('plugin:Filter');
 var debugErr = require('debug')('plugin:Filter:error');
 var Util = require('../Util.js');
-
+var NodeUtil = require('util');
 /**
 * The filter plugin.
 * @param {Object} The Jira Api as defined by the library jira.
@@ -59,7 +59,7 @@ module.exports = function(jiraApi) {
                     id: filterId
                 });
                 if (!issue) {
-                    debugErr('Could not find any filter with id: ' + filterId + '.');
+                    console.error(NodeUtil.format('Could not find any filter with id: %s.', filterId));
                     throw '';
                 } else {
                     return Q.ninvoke(jiraApi, 'requestRef', issue.searchUrl);
@@ -102,7 +102,7 @@ module.exports = function(jiraApi) {
                 Util.createAsciiTable(table);
                 deferred.resolve();
             }, function(err) {
-                debugErr("Failed to request to get all the favourites.");
+                console.error(NodeUtil.format('Failed to request to get all the favourites. Error that was returned is %j', err));
                 deferred.reject();
             })
             .done();
