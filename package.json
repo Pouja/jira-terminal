@@ -22,7 +22,7 @@
     "time-grunt": "^1.0.0"
   },
   "scripts": {
-    "test": "npm test"
+    "test": "NODE_ENV=test grunt"
   },
   "keywords": [
     "jira",

@@ -1,5 +1,6 @@
 plan:
 
+jira issue start --- create new branch
 jira search "jql" --- performs a search with the given jql syntax
 jira issues STATUSSES --- opens all issues that are assigned to the current user and matches the given statusses
 jira new PROJECT SUMMARY
@@ -15,5 +16,4 @@ TODO
     !implement one time config setup
     implement auto complete (will take a lot of effort and time)
     implement help
-    !add grunt for building and such
     !add one time oath

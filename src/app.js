@@ -4,23 +4,7 @@ var debug = require('debug')('jira-terminal');
 var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 var Util = require('util');
-var config = {};
-
-var loadConfig = function() {
-    if (fs.existsSync(__dirname + '/config.json')) {
-        var content = fs.readFileSync('config.json', 'utf8');
-        config = JSON.parse(content);
-    } else {
-        console.error('You must create a config.json file. Example {');
-        console.error('\t"protocol": "https"');
-        console.error('\t"host": "jira.example.nl"');
-        console.error('\t"port": 443');
-        console.error('\t"username": "john.awesome"');
-        console.error('\t"password": "mysecret"');
-        console.error('}');
-    }
-};
-loadConfig();
+var config = require('../config.json');
 
 var jira = new Jira(config.protocol, config.host, config.port, config.username,
     config.password, config.apiVersion || 2);

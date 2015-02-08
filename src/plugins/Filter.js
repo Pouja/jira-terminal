@@ -71,9 +71,9 @@ module.exports = function(jiraApi, argv) {
                 deferred.resolve();
             }, function(err){
                 if(typeof err === 'string'){
-                    console.error(err);
+                    Util.error(err);
                 } else {
-                    console.error(NodeUtil.format('Failed to retrieves the favourites. Error: %j', err));
+                    Util.error(NodeUtil.format('Failed to retrieves the favourites. Error: %j', err));
                 }
                 deferred.reject(err);
             })
@@ -110,7 +110,7 @@ module.exports = function(jiraApi, argv) {
                 Util.createAsciiTable(table);
                 deferred.resolve();
             }, function(err) {
-                console.error(NodeUtil.format('Failed to request to get all the favourites. Error that was returned is %j', err));
+                Util.error(NodeUtil.format('Failed to request to get all the favourites. Error that was returned is %j', err));
                 deferred.reject();
             })
             .done();

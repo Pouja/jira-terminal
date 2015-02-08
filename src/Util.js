@@ -59,7 +59,7 @@ var Util = function() {
         return sentence.replace(/\'|\r|\n/g, '');
     };
 
-    /** 
+    /**
     * Formats the sentences by appling line breaks so that the asciitable does not break.
     * @param {String} sentence The sentece to be formatted.
     * @param {Number} emptySpace The amount of space that is already take by the other columns.
@@ -105,9 +105,12 @@ var Util = function() {
                 asciiTable.push(row);
             });
 
-            console.log(asciiTable.toString());
+            self.log(asciiTable.toString());
         }
     };
+
+    self.log = (process.env.NODE_ENV !== 'test') ? console.log : function(){};
+    self.error = (process.env.NODE_ENV !== 'test') ? console.error : function(){};
 
     return self;
 };
