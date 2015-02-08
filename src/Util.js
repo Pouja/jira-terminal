@@ -2,7 +2,7 @@ var _ = require('lodash');
 var CliTable = require('cli-table');
 var argv = require('minimist')(process.argv.slice(2));
 
-module.exports = function() {
+var Util = function() {
     var self = {};
     /**
      * Sorts the table rows on the given col name.
@@ -19,7 +19,7 @@ module.exports = function() {
                 return row[colNumber];
             });
         }
-    }
+    };
 
     /**
      * Filters the row(s) on the given string.
@@ -46,7 +46,7 @@ module.exports = function() {
                 });
             });
         }
-    }
+    };
 
     /**
     * Removes line breaks and escapes.
@@ -57,7 +57,7 @@ module.exports = function() {
     */
     self.cleanSentence = function(sentence) {
         return sentence.replace(/\'|\r|\n/g, '');
-    }
+    };
 
     /** 
     * Formats the sentences by appling line breaks so that the asciitable does not break.
@@ -80,7 +80,7 @@ module.exports = function() {
             }
         }
         return sentences.join();
-    }
+    };
 
     /**
     * Creates an Ascii Table based on the library Cli-Table (yes i know the names are conflicting).
@@ -107,6 +107,10 @@ module.exports = function() {
 
             console.log(asciiTable.toString());
         }
-    }
+    };
+
     return self;
-}();
+};
+
+// We want a singleton
+module.exports = new Util();

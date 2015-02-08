@@ -1,7 +1,5 @@
 var _ = require('lodash');
 var Q = require('q');
-var debug = require('debug')('plugin:Filter');
-var debugErr = require('debug')('plugin:Filter:error');
 var Util = require('../Util.js');
 var NodeUtil = require('util');
 
@@ -28,7 +26,7 @@ module.exports = function(jiraApi, argv) {
         } else {
             return self.getIssues(argv._[1]);
         }
-    }
+    };
 
     /**
     * Retrievess all the issue that match the filter id.
@@ -43,7 +41,8 @@ module.exports = function(jiraApi, argv) {
             var table = {
                 head: ['id', 'summary', 'issuetype', 'status', 'link'],
                 rows: []
-            }
+            };
+
             _.each(result.issues, function(issue) {
                 table.rows.push([
                     issue.id,
@@ -66,7 +65,7 @@ module.exports = function(jiraApi, argv) {
                     throw '';
                 } else {
                     return Q.ninvoke(jiraApi, 'requestRef', issue.searchUrl);
-                };
+                }
             })
             .then(function(issues) {
                 Util.createAsciiTable(makeTable(issues));
@@ -75,7 +74,7 @@ module.exports = function(jiraApi, argv) {
             .done();
 
         return deferred.promise;
-    }
+    };
 
     /**
     * Get all the filter ids.
@@ -87,7 +86,7 @@ module.exports = function(jiraApi, argv) {
         var table = {
             head: ['id', 'name'],
             rows: []
-        }
+        };
 
         var filters = [];
 
@@ -111,7 +110,7 @@ module.exports = function(jiraApi, argv) {
             .done();
 
         return deferred.promise;
-    }
+    };
 
     return self;
 };

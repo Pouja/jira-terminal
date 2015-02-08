@@ -1,6 +1,4 @@
-var _ = require('lodash');
 var Q = require('q');
-var debug = require('debug')('plugin:Issue');
 var debugErr = require('debug')('plugin:Issue:error');
 var Util = require('../Util.js');
 var NodeUtil = require('util');
@@ -8,7 +6,7 @@ var NodeUtil = require('util');
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
     argv = argv || require('minimist')(process.argv.slice(2));
-    
+
     var self = {
         name: 'Issue',
         pattern: 'issue'
@@ -30,7 +28,7 @@ module.exports = function(jiraApi, argv) {
         }
 
         return deferred.promise;
-    }
+    };
 
     /**
      * Callend for 'issue get ID'
@@ -71,12 +69,12 @@ module.exports = function(jiraApi, argv) {
                 Util.createAsciiTable(makeTable(issue));
                 deferred.resolve();
             }, function(err) {
-                console.error(NodeUtil('Error retrieving the information for issue %s.\n Error says %j', id, err));
+                console.error(NodeUtil.format('Error retrieving the information for issue %s.\n Error says %j', id, err));
                 deferred.reject();
             })
             .done();
         return deferred.promise;
-    }
+    };
 
     /**
      * Starts an issue based on the transition.
@@ -92,14 +90,11 @@ module.exports = function(jiraApi, argv) {
             return deferred;
         }
 
-        Q.ninvoke(jiraApi, 'getCurrentUser')
-            .then(function(currentUser) {
-                return Q.ninvoke(jiraApi, 'transitionIssue', id, {
-                    transition: {
-                        id: 4
-                    }
-                });
-            })
+        Q.ninvoke(jiraApi, 'transitionIssue', id, {
+            transition: {
+                id: 4
+            }
+        })
             .then(function() {
                 console.log(NodeUtil.format('Succesfull update issue %s', id));
                 deferred.resolve();
@@ -108,7 +103,7 @@ module.exports = function(jiraApi, argv) {
                 deferred.reject();
             });
         return deferred;
-    }
+    };
 
     /**
      * Called by 'issue stop ID STATUS MSG'.
@@ -127,22 +122,19 @@ module.exports = function(jiraApi, argv) {
             return deferred;
         }
 
-        Q.ninvoke(jiraApi, 'getCurrentUser')
-            .then(function(currentUser) {
-                return Q.ninvoke(jiraApi, 'transitionIssue', id, {
-                    transition: {
-                        id: 5
-                    },
-                    resolution: {
-                        name: status
-                    },
-                    comment: [{
-                        add: {
-                            body: message
-                        }
-                    }]
-                });
-            })
+        Q.ninvoke(jiraApi, 'transitionIssue', id, {
+            transition: {
+                id: 5
+            },
+            resolution: {
+                name: status
+            },
+            comment: [{
+                add: {
+                    body: message
+                }
+            }]
+        })
             .then(function() {
                 console.log(NodeUtil.format('Succesfull update issue %s.', id));
                 deferred.resolve();
@@ -151,7 +143,7 @@ module.exports = function(jiraApi, argv) {
                 deferred.reject();
             });
         return deferred;
-    }
+    };
 
     return self;
-}
+};

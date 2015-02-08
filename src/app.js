@@ -1,11 +1,8 @@
 var Jira = require('jira').JiraApi;
 var _ = require('lodash');
 var debug = require('debug')('jira-terminal');
-var debugErr = require('debug')('jira-terminal:error');
-var q = require('q');
 var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
-var CliTable = require('cli-table');
 var Util = require('util');
 var config = {};
 
@@ -22,16 +19,17 @@ var loadConfig = function() {
         console.error('\t"password": "mysecret"');
         console.error('}');
     }
-}();
+};
+loadConfig();
 
 var jira = new Jira(config.protocol, config.host, config.port, config.username,
     config.password, config.apiVersion || 2);
 
 // Load all plugins.
 var plugins = _.map(config.plugins, function(plugin) {
-    var constr = require('./plugins/' + plugin + '.js');
+    var Constr = require('./plugins/' + plugin + '.js');
     debug(Util.format('Loaded plugin: %s', plugin));
-    return new constr(jira);
+    return new Constr(jira);
 });
 
 // Get the plugin based on the first argument

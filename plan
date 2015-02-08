@@ -12,7 +12,8 @@ let users define which columsn they want
 
 
 TODO
-    implement one time config setup
-    implement auto complete
+    !implement one time config setup
+    implement auto complete (will take a lot of effort and time)
     implement help
-    add grunt for building and such
+    !add grunt for building and such
+    !add one time oath
