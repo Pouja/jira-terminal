@@ -6,6 +6,7 @@ var q = require('q');
 var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 var CliTable = require('cli-table');
+var Util = require('util');
 var config = {};
 
 var loadConfig = function() {
@@ -29,7 +30,7 @@ var jira = new Jira(config.protocol, config.host, config.port, config.username,
 // Load all plugins.
 var plugins = _.map(config.plugins, function(plugin) {
     var constr = require('./plugins/' + plugin + '.js');
-    debug('Loaded plugin: ' + plugin);
+    debug(Util.format('Loaded plugin: %s', plugin));
     return new constr(jira);
 });
 
@@ -39,8 +40,8 @@ var plugin = _.find(plugins, {
 });
 
 if (plugin) {
-    debug("Invoking hook of the plugin " + plugin.name + ".");
+    debug(Util.format('Invoking hook of the plugin %s.', plugin.name));
     plugin.hook(argv);
 } else {
-    console.error("Did not find a plugin that matches: " + argv._[0]);
+    console.error(Util.format('Did not find a plugin that matches: %s.', argv._[0]));
 }
