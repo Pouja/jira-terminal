@@ -1,0 +1,8 @@
+{
+    "protocol": "https",
+    "host": "jira.example.nl",
+    "port": 443,
+    "username": "john.lee",
+    "password": "secret",
+    "plugins": ["Filter","Issue"]
+}
