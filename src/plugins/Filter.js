@@ -10,12 +10,12 @@ var NodeUtil = require('util');
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
     argv = argv || require('minimist')(process.argv.slice(2));
-    
+
     var self = {
         name: 'Filter',
         pattern: 'filter'
     };
-    
+
     /**
     * The main point.
     * @return {Object} Q.promise
@@ -61,8 +61,7 @@ module.exports = function(jiraApi, argv) {
                     id: filterId
                 });
                 if (!issue) {
-                    console.error(NodeUtil.format('Could not find any filter with id: %s.', filterId));
-                    throw '';
+                    throw NodeUtil.format('Could not find any filter with id: %s.', filterId);
                 } else {
                     return Q.ninvoke(jiraApi, 'requestRef', issue.searchUrl);
                 }
@@ -70,7 +69,14 @@ module.exports = function(jiraApi, argv) {
             .then(function(issues) {
                 Util.createAsciiTable(makeTable(issues));
                 deferred.resolve();
-            }, deferred.reject)
+            }, function(err){
+                if(typeof err === 'string'){
+                    console.error(err);
+                } else {
+                    console.error(NodeUtil.format('Failed to retrieves the favourites. Error: %j', err));
+                }
+                deferred.reject(err);
+            })
             .done();
 
         return deferred.promise;
