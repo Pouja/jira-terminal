@@ -12,7 +12,14 @@
     "minimist": "^1.1.0",
     "q": "^1.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-mocha-test": "^0.12.7",
+    "jshint-stylish": "^1.0.0",
+    "mocha": "^2.1.0",
+    "time-grunt": "^1.0.0"
+  },
   "scripts": {
     "test": "npm test"
   },
