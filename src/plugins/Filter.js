@@ -4,35 +4,52 @@ var Util = require('../Util.js');
 var NodeUtil = require('util');
 
 /**
-* The filter plugin.
-* @param {Object} The Jira Api as defined by the library jira.
-*/
+ * The filter plugin.
+ * @param {Object} The Jira Api as defined by the library jira.
+ */
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
     argv = argv || require('minimist')(process.argv.slice(2));
 
     var self = {
         name: 'Filter',
-        pattern: 'filter'
+        pattern: 'filter',
+        help: 'retrieve all your filters and print all issues that match that filter'
     };
 
     /**
-    * The main point.
-    * @return {Object} Q.promise
-    */
+     * The main point.
+     * @return {Object} Q.promise
+     */
     self.hook = function() {
-        if (argv._[1] === 'all') {
-            return self.getFilters();
-        } else {
-            return self.getIssues(argv._[1]);
+        switch (argv._[1]) {
+            case 'all':
+                return self.getFilters();
+            case 'help':
+                return self.printHelp();
+            default:
+                return self.getIssues();
         }
     };
 
+    self.printHelp = function() {
+        var helps = [
+            ['all', 'retrieves all filter identifiers that are in your favourites'],
+            ['ID', 'prints all the issues that match the filter id']
+        ];
+        Util.help(helps);
+
+        // We have to stay consistent. So just return an empty promise.
+        var deferred = Q.defer();
+        deferred.resolve();
+        return deferred.promise;
+    }
+
     /**
-    * Retrievess all the issue that match the filter id.
-    * @param {Number} filterId The filter id.
-    * @return {Object} Q.promise.
-    */
+     * Retrievess all the issue that match the filter id.
+     * @param {Number} filterId The filter id.
+     * @return {Object} Q.promise.
+     */
     self.getIssues = function(filterId) {
         var deferred = Q.defer();
         filterId = filterId + '';
@@ -69,8 +86,8 @@ module.exports = function(jiraApi, argv) {
             .then(function(issues) {
                 Util.createAsciiTable(makeTable(issues));
                 deferred.resolve();
-            }, function(err){
-                if(typeof err === 'string'){
+            }, function(err) {
+                if (typeof err === 'string') {
                     Util.error(err);
                 } else {
                     Util.error(NodeUtil.format('Failed to retrieves the favourites. Error: %j', err));
@@ -83,9 +100,9 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-    * Get all the filter ids.
-    * @return {Object} Q.promise.
-    */
+     * Get all the filter ids.
+     * @return {Object} Q.promise.
+     */
     self.getFilters = function() {
         var deferred = Q.defer();
 

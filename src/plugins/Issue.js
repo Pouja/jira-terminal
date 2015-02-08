@@ -8,7 +8,8 @@ module.exports = function(jiraApi, argv) {
 
     var self = {
         name: 'Issue',
-        pattern: 'issue'
+        pattern: 'issue',
+        help: 'start, stop or retrieve information about a specific issue'
     };
 
     /**
@@ -28,6 +29,20 @@ module.exports = function(jiraApi, argv) {
 
         return deferred.promise;
     };
+
+    self.helpHandler = function() {
+        var helps = [
+            ['get', 'get ID', 'prints additional information about the given issue id'],
+            ['start', 'start -i ID | start ID', 'performs transition id 4 on the given issue id'],
+            ['stop', 'stop -i ID -s STATUS -m MESSAGE', 'performs transition id 5 on the given issue id, applies the status and adds the message']
+        ];
+        Util.help(helps);
+
+        // We have to stay consistent. So just return an empty promise.
+        var deferred = Q.defer();
+        deferred.resolve();
+        return deferred.promise;
+    }
 
     /**
      * Callend for 'issue get ID'

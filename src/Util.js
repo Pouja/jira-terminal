@@ -49,29 +49,29 @@ var Util = function() {
     };
 
     /**
-    * Removes line breaks and escapes.
-    * Currenlty this fucks up the table layout.
-    * TODO make sure that line breaks dont fuck up the layout.
-    * @param {String} The sentece to be filtered.
-    * @return {String} the sentences but cleaned.
-    */
+     * Removes line breaks and escapes.
+     * Currenlty this fucks up the table layout.
+     * TODO make sure that line breaks dont fuck up the layout.
+     * @param {String} The sentece to be filtered.
+     * @return {String} the sentences but cleaned.
+     */
     self.cleanSentence = function(sentence) {
         return sentence.replace(/\'|\r|\n/g, '');
     };
 
     /**
-    * Formats the sentences by appling line breaks so that the asciitable does not break.
-    * @param {String} sentence The sentece to be formatted.
-    * @param {Number} emptySpace The amount of space that is already take by the other columns.
-    * return {String} the sentece with line breaks.
-    */
+     * Formats the sentences by appling line breaks so that the asciitable does not break.
+     * @param {String} sentence The sentece to be formatted.
+     * @param {Number} emptySpace The amount of space that is already take by the other columns.
+     * return {String} the sentece with line breaks.
+     */
     self.setLinebreaks = function(rawSentence, emptySpace) {
         var width = process.stdout.columns - emptySpace;
         var words = rawSentence.split(' ');
         var sentences = [words[0]];
         var counter = 0;
-        for(var i = 1; i < words.length; i++) {
-            if(sentences[counter].length + words[i].length > width) {
+        for (var i = 1; i < words.length; i++) {
+            if (sentences[counter].length + words[i].length > width) {
                 sentences[counter] += '\n' + words[i];
                 counter++;
                 sentences[counter] = '';
@@ -83,12 +83,12 @@ var Util = function() {
     };
 
     /**
-    * Creates an Ascii Table based on the library Cli-Table (yes i know the names are conflicting).
-    * @param {Array} table.rows The rows to be added to the table.
-    * @param {Array} table.head (Optional) The headers of each column.
-    * @param {Boolean} table.sort (Optional) Default true. Indicate if it should sort if the argument is given.
-    * @param {Boolean} table.filter (Optional) Default true. Indicate if it should filter if the argument is given.
-    */
+     * Creates an Ascii Table based on the library Cli-Table (yes i know the names are conflicting).
+     * @param {Array} table.rows The rows to be added to the table.
+     * @param {Array} table.head (Optional) The headers of each column.
+     * @param {Boolean} table.sort (Optional) Default true. Indicate if it should sort if the argument is given.
+     * @param {Boolean} table.filter (Optional) Default true. Indicate if it should filter if the argument is given.
+     */
     self.createAsciiTable = function(table) {
         if (table.head || table.rows) {
             if (!table.sort && argv.t !== undefined) {
@@ -109,8 +109,51 @@ var Util = function() {
         }
     };
 
-    self.log = (process.env.NODE_ENV !== 'test') ? console.log : function(){};
-    self.error = (process.env.NODE_ENV !== 'test') ? console.error : function(){};
+    /**
+     * The logger of the application.
+     * Uses the standard console.log iff the NODE_ENV is not 'test'.
+     */
+    self.log = (process.env.NODE_ENV !== 'test') ? console.log : function() {};
+
+    /**
+     * The error logger of the application.
+     * Uses the standard console.error iff the NODE_ENV is not 'test'.
+     */
+    self.error = (process.env.NODE_ENV !== 'test') ? console.error : function() {};
+
+    /**
+     * Pretty prints the which arguments can be run with the given description.
+     * The first row should contain the argument(s) and the second row should contain the description.
+     */
+    self.help = function(rows) {
+        var table = new CliTable({
+            chars: {
+                'top': '',
+                'top-mid': '',
+                'top-left': '',
+                'top-right': '',
+                'bottom': '',
+                'bottom-mid': '',
+                'bottom-left': '',
+                'bottom-right': '',
+                'left': '',
+                'left-mid': '',
+                'mid': '',
+                'mid-mid': '',
+                'right': '',
+                'right-mid': '',
+                'middle': ' --- '
+            },
+            style: {
+                'padding-left': 0,
+                'padding-right': 0
+            }
+        });
+        _.each(rows, function(row){
+            table.push(row);
+        });
+        console.log(table.toString());
+    }
 
     return self;
 };
