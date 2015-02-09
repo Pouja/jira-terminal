@@ -1,6 +1,6 @@
 {
   "name": "jira-terminal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Easy shortcuts in terminal to work with jira",
   "main": "app.js",
   "dependencies": {
@@ -24,13 +24,13 @@
     "time-grunt": "^1.0.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test grunt"
+    "test": "grunt"
   },
   "keywords": [
     "jira",
     "terminal",
     "nodejs"
   ],
-  "author": "Pouja",
+  "author": "http://www.github.com/Pouja/",
   "license": "MIT"
 }
