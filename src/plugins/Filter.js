@@ -2,7 +2,6 @@ var _ = require('lodash');
 var Q = require('q');
 var Util = require('../Util.js');
 var NodeUtil = require('util');
-
 /**
  * The filter plugin.
  * @param {Object} The Jira Api as defined by the library jira.
@@ -28,7 +27,7 @@ module.exports = function(jiraApi, argv) {
             case 'help':
                 return self.printHelp();
             default:
-                return self.getIssues();
+                return self.getIssues(argv._[1]);
         }
     };
 

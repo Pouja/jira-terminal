@@ -56,7 +56,7 @@ var Util = function() {
      * @return {String} the sentences but cleaned.
      */
     self.cleanSentence = function(sentence) {
-        return sentence.replace(/\'|\r|\n/g, '');
+        return sentence.replace(/\'|\r|\t/g, '');
     };
 
     /**
@@ -68,18 +68,28 @@ var Util = function() {
     self.setLinebreaks = function(rawSentence, emptySpace) {
         var width = process.stdout.columns - emptySpace;
         var words = rawSentence.split(' ');
-        var sentences = [words[0]];
-        var counter = 0;
-        for (var i = 1; i < words.length; i++) {
-            if (sentences[counter].length + words[i].length > width) {
-                sentences[counter] += '\n' + words[i];
-                counter++;
-                sentences[counter] = '';
+
+        // Will contain all the sentences with additional line breaks
+        var sentences = '';
+
+        // Length is the number of characters since the last line break
+        var length = 0;
+
+        words.forEach(function(word) {
+            // If the sentence is getting to long, add a line break
+            if (length + word.length >= width) {
+                sentences += '\n' + word;
+                length = word.length - word.lastIndexOf('\n');
+            // If the next word already has a line break reset 'length'
+            } else if (word.indexOf('\n') !== -1) {
+                sentences += ' ' + word;
+                length = word.length - word.lastIndexOf('\n');
             } else {
-                sentences[counter] += ' ' + words[i];
+                sentences += word + ' ';
+                length += word.length;
             }
-        }
-        return sentences.join();
+        });
+        return sentences;
     };
 
     /**
@@ -149,7 +159,7 @@ var Util = function() {
                 'padding-right': 0
             }
         });
-        _.each(rows, function(row){
+        _.each(rows, function(row) {
             table.push(row);
         });
         console.log(table.toString());
