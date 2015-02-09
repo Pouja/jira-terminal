@@ -33,6 +33,8 @@ module.exports = function(jiraApi, argv) {
     };
 
     self.printHelp = function() {
+        Util.help([['Usages: filter', '[all] [ID]']]);
+        Util.log();
         var helps = [
             ['all', 'retrieves all filter identifiers that are in your favourites'],
             ['ID', 'prints all the issues that match the filter id']
@@ -43,7 +45,7 @@ module.exports = function(jiraApi, argv) {
         var deferred = Q.defer();
         deferred.resolve();
         return deferred.promise;
-    }
+    };
 
     /**
      * Retrievess all the issue that match the filter id.

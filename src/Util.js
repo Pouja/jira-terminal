@@ -136,13 +136,13 @@ var Util = function() {
                 'bottom-mid': '',
                 'bottom-left': '',
                 'bottom-right': '',
-                'left': '',
+                'left': '  ',
                 'left-mid': '',
                 'mid': '',
                 'mid-mid': '',
                 'right': '',
                 'right-mid': '',
-                'middle': ' --- '
+                'middle': '  '
             },
             style: {
                 'padding-left': 0,
@@ -153,7 +153,7 @@ var Util = function() {
             table.push(row);
         });
         console.log(table.toString());
-    }
+    };
 
     return self;
 };

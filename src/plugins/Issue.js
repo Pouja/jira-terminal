@@ -31,10 +31,12 @@ module.exports = function(jiraApi, argv) {
     };
 
     self.helpHandler = function() {
+        Util.help([['Usages: issue', '[get ID] [start -i ID] [start ID] [stop -i ID -s STATUS -m MESSAGE]']]);
+        Util.log();
         var helps = [
-            ['get', 'get ID', 'prints additional information about the given issue id'],
-            ['start', 'start -i ID | start ID', 'performs transition id 4 on the given issue id'],
-            ['stop', 'stop -i ID -s STATUS -m MESSAGE', 'performs transition id 5 on the given issue id, applies the status and adds the message']
+            ['get', 'prints additional information about the given issue id'],
+            ['start', 'performs transition id 4 on the given issue id'],
+            ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message']
         ];
         Util.help(helps);
 
@@ -42,7 +44,7 @@ module.exports = function(jiraApi, argv) {
         var deferred = Q.defer();
         deferred.resolve();
         return deferred.promise;
-    }
+    };
 
     /**
      * Callend for 'issue get ID'

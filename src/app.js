@@ -1,7 +1,6 @@
 var Jira = require('jira').JiraApi;
 var _ = require('lodash');
 var debug = require('debug')('jira-terminal');
-var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 var Util = require('./Util.js');
 var NodeUtil = require('util');
@@ -18,10 +17,17 @@ var plugins = _.map(config.plugins, function(plugin) {
 });
 
 if (argv._[0] === 'help') {
+    Util.log('\nThe list of all plugins that can be invoked.\n');
     var helps = plugins.map(function(plugin) {
         return [plugin.pattern, plugin.help];
     });
     Util.help(helps);
+    Util.log('\nSome plugins print out a table which can be sorted and filtered by:\n');
+    Util.help([
+        ['-t NAME', 'sort by column NAME'],
+        ['-f COLUMN:NEEDLE', 'filter on all occurences of NEEDLE in COLUMN'],
+        ['-f NEEDLE', 'filter on all occurences of NEEDLE in a column']
+    ]);
 } else {
     // Get the plugin based on the first argument
     var plugin = _.find(plugins, {
