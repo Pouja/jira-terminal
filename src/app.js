@@ -8,6 +8,11 @@ var config = require('../config.json');
 var jira = new Jira(config.protocol, config.host, config.port, config.username,
     config.password, config.apiVersion || 2);
 
+if (!config) {
+    Util.error('You must create the config file \'config.json\'. See example.config.json');
+    process.exit(1);
+}
+
 // Load all plugins.
 var plugins = _.map(config.plugins, function(plugin) {
     var Constr = require('./plugins/' + plugin + '.js');
