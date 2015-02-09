@@ -30,6 +30,11 @@ module.exports = function(jiraApi, argv) {
         return deferred.promise;
     };
 
+    /**
+    * Called with 'issue help'.
+    * Prints the usages and the description of each command.
+    * @return {Q}
+    */
     self.helpHandler = function() {
         Util.help([['Usages: issue', '[get ID] [start -i ID] [start ID] [stop -i ID -s STATUS -m MESSAGE]']]);
         Util.log();
@@ -122,7 +127,7 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-     * Called by 'issue stop -i ID -s STATUS -m MSG'.
+     * Stops the issue and adds the message to it with the given status.
      * @return {Q}
      */
     self.stopHandler = function() {
@@ -133,7 +138,7 @@ module.exports = function(jiraApi, argv) {
         var message = argv.m;
 
         if (!status || !id || !message) {
-            Util.error('You must supply the id (-i | 2nd argument), status (-s) and message (-m).');
+            Util.error('Incorrect usage of \'issue stop\', see \'issue help\' for more information.');
             deferred.reject();
             return deferred.promise;
         }

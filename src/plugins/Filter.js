@@ -32,6 +32,12 @@ module.exports = function(jiraApi, argv) {
         }
     };
 
+
+    /**
+    * Called with 'filter help'.
+    * Prints the usages and the description of each command.
+    * @return {Q}
+    */
     self.printHelp = function() {
         Util.help([['Usages: filter', '[all] [ID]']]);
         Util.log();

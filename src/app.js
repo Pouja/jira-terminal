@@ -5,7 +5,6 @@ var argv = require('minimist')(process.argv.slice(2));
 var Util = require('./Util.js');
 var NodeUtil = require('util');
 var config = require('../config.json');
-
 var jira = new Jira(config.protocol, config.host, config.port, config.username,
     config.password, config.apiVersion || 2);
 
