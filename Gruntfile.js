@@ -31,5 +31,11 @@ module.exports = function(grunt) {
             }
         }
     });
-    grunt.registerTask('default', ['jshint','mochaTest']);
+    grunt.registerTask('default', function() {
+        if (process.env.NODE_ENV !== 'test') {
+            grunt.log.warn('Please run the tests with NODE_ENV=test to prevent seeing all the pretty tables and logs.');
+        } else {
+            grunt.task.run(['jshint', 'mochaTest']);
+        }
+    });
 }
