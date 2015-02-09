@@ -11,9 +11,6 @@ next step:
 
 let users define which columsn they want
 
-
 TODO
-    !implement one time config setup
     implement auto complete (will take a lot of effort and time)
-    implement help
     !add one time oath -- this will probably be implemented later since oauth 1 (jira/attlasian do not support oauth 2, which is sad) is kinda unnecessary complicated.
