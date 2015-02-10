@@ -1,9 +1,76 @@
 var _ = require('lodash');
 var CliTable = require('cli-table');
 var argv = require('minimist')(process.argv.slice(2));
+var config = require('../config.json');
+var NodeUtil = require('util');
 
 var Util = function() {
     var self = {};
+
+    /**
+     * @param {Object} obj The object.
+     * @param {String} path The path to the nested value.
+     * @return {Object|Array|Number|String} the value at the @code{path}.
+     */
+    var objectByPath = function(obj, path) {
+        if (obj[path]) {
+            return obj[path];
+        }
+        var current = obj;
+        path.split('.').every(function(p) {
+            current = current[p];
+            return current !== undefined && current !== null;
+        });
+        return current;
+    };
+
+    /**
+    * Easy util function to create a vertical rows for CliTable.
+    * @param {Array} map A list of entries that should be converted to rows.
+    * @param {String} map.name The name the row should have.
+    * @param {String} map.key The identifier to where the value is stored.
+    * @param {Boolean} map.issueLink Iff it is true: creates for that row an issue link. It uses the @code{data} object to retrieve the issue key.
+    * @param {Boolean} map.linebreaks Iff it is true: cleanes the value and adds line breaks.
+    * @param {Number} map.emptySpace Used in combation with linebreaks.
+    * @param {Object} data The data.
+    * @return {Array} an array of rows for vertical display.
+    */
+    self.makeVerticalRows = function(map, data) {
+        return _.map(map, function(entry) {
+            var row = {};
+            if (entry.issueLink) {
+                row[entry.name] = self.makeIssueLink(data);
+                return row;
+            } else {
+                var body = objectByPath(data, entry.key);
+                if (entry.linebreaks) {
+                    body = self.setLinebreaks(self.cleanSentence(body), entry.emptySpace);
+                }
+                if (body) {
+                    row[entry.name] = body;
+                    return row;
+                }
+            }
+        }).filter(function(e){
+            return e;
+        });
+    };
+
+    /**
+    * @param {Object|String} issue This should either be the object which contains the key or the it should be issue key.
+    * @return {String} A http link to the issue.
+    * @throw Throws when @code{issue} is not a string or object.
+    */
+    self.makeIssueLink = function(issue) {
+        if (typeof issue === 'string') {
+            return NodeUtil.format('%s://%s/browse/%s', config.protocol, config.host, issue);
+        } else if (typeof issue === 'object') {
+            return NodeUtil.format('%s://%s/browse/%s', config.protocol, config.host, issue.key);
+        } else {
+            throw new Error('Util:makeIssueLink expects as argument either a string or object.');
+        }
+    };
+
     /**
      * Sorts the table rows on the given col name.
      * @param {Array} table.head The header names of the table.
@@ -80,7 +147,7 @@ var Util = function() {
             if (length + word.length >= width) {
                 sentences += '\n' + word;
                 length = word.length - word.lastIndexOf('\n');
-            // If the next word already has a line break reset 'length'
+                // If the next word already has a line break reset 'length'
             } else if (word.indexOf('\n') !== -1) {
                 sentences += ' ' + word;
                 length = word.length - word.lastIndexOf('\n');

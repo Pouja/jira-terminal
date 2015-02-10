@@ -31,12 +31,14 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-    * Called with 'issue help'.
-    * Prints the usages and the description of each command.
-    * @return {Q}
-    */
+     * Called with 'issue help'.
+     * Prints the usages and the description of each command.
+     * @return {Q}
+     */
     self.helpHandler = function() {
-        Util.help([['Usages: issue', '[get ID] [start -i ID] [start ID] [stop -i ID -s STATUS -m MESSAGE]']]);
+        Util.help([
+            ['Usages: issue', '[get ID] [start -i ID] [start ID] [stop -i ID -s STATUS -m MESSAGE]']
+        ]);
         Util.log();
         var helps = [
             ['get', 'prints additional information about the given issue id'],
@@ -60,25 +62,38 @@ module.exports = function(jiraApi, argv) {
         var deferred = Q.defer();
 
         function makeTable(issue) {
+            var rows = Util.makeVerticalRows([{
+                name: 'id',
+                key: 'key'
+            }, {
+                name: 'summary',
+                key: 'fields.summary'
+            }, {
+                name: 'issue type',
+                key: 'fields.issuetype.name'
+            }, {
+                name: 'reporter',
+                key: 'fields.reporter.name'
+            }, {
+                name: 'description',
+                key: 'fields.description',
+                linebreaks: true,
+                emptySpace: 40
+            }, {
+                name: 'status',
+                key: 'fields.status.name'
+            }, {
+                name: 'project',
+                key: 'fields.project.name'
+            }, {
+                name: 'assignee',
+                key: 'fields.assignee.name'
+            }, {
+                name: 'link',
+                issueLink: true
+            }], issue);
             return {
-                rows: [{
-                    'id': issue.id + ''
-                }, {
-                    'summary': issue.fields.summary
-                }, {
-                    'issueType': issue.fields.issuetype.name
-                }, {
-                    'reporter': issue.fields.reporter.name
-                }, {
-                    // Descriptions can be way too long and contain linebreaks, tabs etc, so break it and clean.
-                    'description': Util.setLinebreaks(Util.cleanSentence(issue.fields.description), 40)
-                }, {
-                    'status': issue.fields.status.name
-                }, {
-                    'project': issue.fields.project.name
-                }, {
-                    'assignee': (issue.fields.assignee) ? issue.fields.assignee.name : ''
-                }],
+                rows: rows,
                 filter: false,
                 sort: false,
                 head: false,
@@ -138,7 +153,7 @@ module.exports = function(jiraApi, argv) {
         var message = argv.m;
 
         if (!status || !id || !message) {
-            Util.error('Incorrect usage of \'issue stop\', see \'issue help\' for more information.');
+            Util.error('Incorrect usage of \'issue stop\', see \'issue help\'for more information.');
             deferred.reject();
             return deferred.promise;
         }
