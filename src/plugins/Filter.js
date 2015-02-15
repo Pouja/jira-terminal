@@ -33,12 +33,14 @@ module.exports = function(jiraApi, argv) {
 
 
     /**
-    * Called with 'filter help'.
-    * Prints the usages and the description of each command.
-    * @return {Q}
-    */
+     * Called with 'filter help'.
+     * Prints the usages and the description of each command.
+     * @return {Q}
+     */
     self.printHelp = function() {
-        Util.help([['Usages: filter', '[all] [ID]']]);
+        Util.help([
+            ['Usages: filter', '[all] [ID]']
+        ]);
         Util.log();
         var helps = [
             ['all', 'retrieves all filter identifiers that are in your favourites'],
@@ -70,10 +72,10 @@ module.exports = function(jiraApi, argv) {
             _.each(result.issues, function(issue) {
                 table.rows.push([
                     issue.id,
-                    issue.fields.summary,
+                    Util.setLinebreaks(issue.fields.summary, 90),
                     issue.fields.issuetype.name,
                     issue.fields.status.name,
-                    issue.self
+                    Util.makeIssueLink(issue)
                 ]);
             });
             return table;
