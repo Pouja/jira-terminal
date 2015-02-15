@@ -51,9 +51,7 @@ var Util = function() {
                     return row;
                 }
             }
-        }).filter(function(e){
-            return e;
-        });
+        }).filter(Boolean);
     };
 
     /**
@@ -95,7 +93,9 @@ var Util = function() {
      * @param {String} filter The filter in the form of 'column:needle' or just 'needle'.
      */
     self._filter = function(table, filter) {
-        if (~filter.indexOf(':')) {
+        if (!filter || typeof filter === 'boolean') {
+            throw 'The filter function (-f) expects a filter (non-boolean) of minimal length of 1.';
+        } else if (~filter.indexOf(':')) {
             var columnName = filter.split(':')[0];
             var needle = filter.split(':')[1].toLowerCase();
             var colNumber = _.findIndex(table.head, function(h) {
@@ -108,9 +108,10 @@ var Util = function() {
             }
         } else {
             table.rows = _.filter(table.rows, function(row) {
-                return _.filter(row, function(entry) {
+                var t = _.some(row, function(entry) {
                     return~ entry.toLowerCase().indexOf(filter.toLowerCase());
                 });
+                return t;
             });
         }
     };
