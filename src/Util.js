@@ -177,7 +177,7 @@ var Util = function() {
      * Removes line breaks and escapes.
      * Currenlty this fucks up the table layout.
      * TODO make sure that line breaks dont fuck up the layout.
-     * @param {String} The sentece to be filtered.
+     * @param {String} The sentence to be filtered.
      * @return {String} the sentences but cleaned.
      */
     self.cleanSentence = function(sentence) {
@@ -186,9 +186,9 @@ var Util = function() {
 
     /**
      * Formats the sentences by appling line breaks so that the asciitable does not break.
-     * @param {String} sentence The sentece to be formatted.
+     * @param {String} sentence The sentence to be formatted.
      * @param {Number} emptySpace The amount of space that is already take by the other columns.
-     * return {String} the sentece with line breaks.
+     * return {String} the sentence with line breaks.
      */
     self.setLinebreaks = function(rawSentence, emptySpace) {
         var width = process.stdout.columns - emptySpace;
