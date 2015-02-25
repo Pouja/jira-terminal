@@ -4,5 +4,14 @@
     "port": 443,
     "username": "john.lee",
     "password": "secret",
-    "plugins": ["Filter","Issue"]
+    "plugins": ["Filter","Issue"],
+    "git":{
+        "default":"master",
+        "branchMaxLength":50,
+        "nameMapping":{
+            "_":"bugfix",
+            "Story":"feature",
+            "New Feature":"feature"
+        }
+    }
 }

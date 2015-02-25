@@ -1,6 +1,5 @@
 plan:
 
-jira issue start --- create new branch
 jira search "jql" --- performs a search with the given jql syntax
 jira issues STATUSSES --- opens all issues that are assigned to the current user and matches the given statusses
 jira new PROJECT SUMMARY
