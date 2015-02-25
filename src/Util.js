@@ -43,7 +43,7 @@ var Util = function() {
     * @param {String} branchName The name the branch should have.
     */
     self.makeBranch = function(branchName) {
-        var execute = 'git branch ' + branchName;
+        var execute = 'git branch ' + branchName + ' ' + config.git.default;
         debug('executing: ' + execute);
         shell.exec(execute);
     };
@@ -66,13 +66,14 @@ var Util = function() {
     self.branch = function(issue) {
         if (argv.branch) {
             var branchName = '';
-            if (issue.fields && issue.fields.issuetype && issue.fields.issuetype.name) {
+            if (issue.fields.issuetype && issue.fields.issuetype.name) {
                 var type = issue.fields.issuetype.name;
                 var branchType = config.git.nameMapping[type] || config.git.nameMapping._;
                 branchName += branchType + '/';
             }
+
             var summary = shortenSentence(issue.fields.summary).replace(/\ /g, '-').toLowerCase();
-            branchName += summary;
+            branchName += issue.key + '-' + summary;
             self.makeBranch(branchName);
 
             if (argv.checkout) {
