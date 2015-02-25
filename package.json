@@ -11,6 +11,7 @@
     "jira": "git://github.com/Pouja/node-jira#master",
     "lodash": "^3.0.1",
     "minimist": "^1.1.0",
+    "moment": "^2.9.0",
     "prompt": "^0.2.14",
     "q": "^1.1.2",
     "shelljs": "^0.3.0"
