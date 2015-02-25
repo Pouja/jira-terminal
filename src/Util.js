@@ -3,6 +3,8 @@ var CliTable = require('cli-table');
 var argv = require('minimist')(process.argv.slice(2));
 var config = require('../config.json');
 var NodeUtil = require('util');
+var shell = require('shelljs');
+var debug = require('debug')('util');
 
 var Util = function() {
     var self = {};
@@ -22,6 +24,61 @@ var Util = function() {
             return current !== undefined && current !== null;
         });
         return current;
+    };
+
+    /**
+    * @param {String} sentence The sentence to be shorted
+    * @param {Number} maxLength The max length the sentence can have.
+    * @return {String} a shorted sentece.
+    */
+    var shortenSentence = function(sentence, maxLength) {
+        var toLong = sentence.length > maxLength;
+        var s_ = toLong ? sentence.substr(0, maxLength - 1) : sentence;
+        s_ = s_.substr(0, s_.lastIndexOf(' '));
+        return s_;
+    };
+
+    /**
+    * Makes a branch with the given name.
+    * @param {String} branchName The name the branch should have.
+    */
+    self.makeBranch = function(branchName) {
+        var execute = 'git branch ' + branchName;
+        debug('executing: ' + execute);
+        shell.exec(execute);
+    };
+
+    /**
+    * Checkouts to the branch name.
+    * @param {String} branchName The name of the branch.
+    */
+    self.checkoutBranch = function(branchName) {
+        var execute = 'git checkout ' + branchName;
+        debug('executing: ' + execute);
+        shell.exec(execute);
+    };
+
+    /**
+    * Makes a branch if the flag 'branch' is set.
+    * If the flag 'checkout' is set as well it will checkout to the branch as well.
+    * @param {Object} issue The issue as returned by the api.
+    */
+    self.branch = function(issue) {
+        if (argv.branch) {
+            var branchName = '';
+            if (issue.fields && issue.fields.issuetype && issue.fields.issuetype.name) {
+                var type = issue.fields.issuetype.name;
+                var branchType = config.git.nameMapping[type] || config.git.nameMapping._;
+                branchName += branchType + '/';
+            }
+            var summary = shortenSentence(issue.fields.summary).replace(/\ /g, '-').toLowerCase();
+            branchName += summary;
+            self.makeBranch(branchName);
+
+            if (argv.checkout) {
+                self.checkoutBranch(branchName);
+            }
+        }
     };
 
     /**
