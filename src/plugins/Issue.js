@@ -1,7 +1,7 @@
 var Q = require('q');
 var debugErr = require('debug')('plugin:Issue:error');
 var Util = require('../Util.js');
-var NodeUtil = require('util');
+
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
     argv = argv || require('minimist')(process.argv.slice(2));
@@ -23,7 +23,7 @@ module.exports = function(jiraApi, argv) {
         if (self[call + 'Handler']) {
             return self[call + 'Handler']();
         } else {
-            debugErr(NodeUtil.format('Unknown issue command %s.', call));
+            debugErr('Unknown issue command %s.', call);
             deferred.reject();
         }
 
@@ -105,7 +105,7 @@ module.exports = function(jiraApi, argv) {
                 Util.createAsciiTable(makeTable(issue));
                 deferred.resolve();
             }, function(err) {
-                Util.error(NodeUtil.format('Error retrieving the information for issue %s.\n Error says %j', id, err));
+                Util.error('Error retrieving the information for issue %s.\n Error says %j', id, err);
                 deferred.reject();
             })
             .done();
@@ -132,10 +132,18 @@ module.exports = function(jiraApi, argv) {
             }
         })
             .then(function() {
-                Util.log(NodeUtil.format('Succesfull update issue %s', id));
+                if(argv.branch){
+                    return Q.ninvoke(jiraApi, 'findIssue', id);
+                }
+                return null;
+            }).then(function(issue){
+                if(issue && argv.branch){
+                    Util.branch(issue);
+                }
+                Util.log('Succesfull update issue %s', id);
                 deferred.resolve();
             }, function(err) {
-                Util.error(NodeUtil.format('Error starting the issue %s. The error that was retrieved is %j', id, err));
+                Util.error('Error starting the issue %s. The error that was retrieved is %j', id, err);
                 deferred.reject();
             });
         return deferred.promise;
@@ -172,10 +180,10 @@ module.exports = function(jiraApi, argv) {
             }]
         })
             .then(function() {
-                Util.log(NodeUtil.format('Succesfull update issue %s.', id));
+                Util.log('Succesfull update issue %s.', id);
                 deferred.resolve();
             }, function(err) {
-                Util.error(NodeUtil.format('Error stopping the issue %s. The error that was retrieved is %j', id, err));
+                Util.error('Error stopping the issue %s. The error that was retrieved is %j', id, err);
                 deferred.reject();
             });
         return deferred.promise;
