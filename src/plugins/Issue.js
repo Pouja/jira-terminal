@@ -37,11 +37,11 @@ module.exports = function(jiraApi, argv) {
      */
     self.helpHandler = function() {
         Util.help([
-            ['Usages: issue', '[get ID] [start -i ID] [start ID] [stop -i ID -s STATUS -m MESSAGE]']
+            ['Usages: issue', '[get ID] [start -i ID] [start ID] [start -i ID --brach] [start -i ID --brach --checkout] [stop -i ID -s STATUS -m MESSAGE]']
         ]);
         Util.log();
         var helps = [
-            ['get', 'prints additional information about the given issue id'],
+            ['get', 'prints additional information about the given issue id, you can also create a branch and or checkout'],
             ['start', 'performs transition id 4 on the given issue id'],
             ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message']
         ];
