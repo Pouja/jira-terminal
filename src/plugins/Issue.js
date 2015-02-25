@@ -64,6 +64,9 @@ module.exports = function(jiraApi, argv) {
         function makeTable(issue) {
             var rows = Util.makeVerticalRows([{
                 name: 'id',
+                key: 'id'
+            }, {
+                name: 'key',
                 key: 'key'
             }, {
                 name: 'summary',
@@ -102,6 +105,9 @@ module.exports = function(jiraApi, argv) {
 
         Q.ninvoke(jiraApi, 'findIssue', id)
             .then(function(issue) {
+                if (argv.print) {
+                    console.log(issue);
+                }
                 Util.createAsciiTable(makeTable(issue));
                 deferred.resolve();
             }, function(err) {
@@ -132,12 +138,12 @@ module.exports = function(jiraApi, argv) {
             }
         })
             .then(function() {
-                if(argv.branch){
+                if (argv.branch) {
                     return Q.ninvoke(jiraApi, 'findIssue', id);
                 }
                 return null;
-            }).then(function(issue){
-                if(issue && argv.branch){
+            }).then(function(issue) {
+                if (issue && argv.branch) {
                     Util.branch(issue);
                 }
                 Util.log('Succesfull update issue %s', id);
