@@ -5,12 +5,20 @@ var argv = require('minimist')(process.argv.slice(2));
 var Util = require('./Util.js');
 var NodeUtil = require('util');
 var config = require('../config.json');
+var colors = require('colors/safe');
 var jira = new Jira(config.protocol, config.host, config.port, config.username,
     config.password, config.apiVersion || 2);
 
+// Check if config is set.
 if (!config) {
     Util.error('You must create the config file \'config.json\'. See example.config.json');
     process.exit(1);
+}
+
+// Make sure the user does not run with sudo since we spawn shell commands.
+var uid = parseInt(process.env.SUDO_UID);
+if(uid) {
+    throw colors.red.bold('You are not allowed to run with sudo!\n This is done for security reasons!!');
 }
 
 // Load all plugins.
@@ -20,8 +28,8 @@ var plugins = _.map(config.plugins, function(plugin) {
     return new Constr(jira);
 });
 
-if (argv._[0] === 'help') {
-    Util.log('\nThe list of all plugins that can be invoked.\n');
+if (argv._.length === 0 || argv._[0] === 'help') {
+    Util.log('\nThe list of all plugins that can be invoked:\n');
     var helps = plugins.map(function(plugin) {
         return [plugin.pattern, plugin.help];
     });
