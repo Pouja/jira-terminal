@@ -118,7 +118,7 @@ var Util = function() {
      * @throw Throws when @code{issue} is not a string or object.
      */
     self.makeIssueLink = function(issue) {
-        if (typeof issue === 'string') {
+        if (typeof issue === 'string' || typeof issue === 'number') {
             return NodeUtil.format('%s://%s/browse/%s', config.protocol, config.host, issue);
         } else if (typeof issue === 'object') {
             return NodeUtil.format('%s://%s/browse/%s', config.protocol, config.host, issue.key);
@@ -176,7 +176,7 @@ var Util = function() {
 
     /**
      * Removes line breaks and escapes.
-     * Currenlty this fucks up the table layout.
+     * Currenlty these special characters fucks up the table layout.
      * TODO make sure that line breaks dont fuck up the layout.
      * @param {String} The sentence to be filtered.
      * @return {String} the sentences but cleaned.
@@ -288,7 +288,7 @@ var Util = function() {
         _.each(rows, function(row) {
             table.push(row);
         });
-        console.log(table.toString());
+        self.log(table.toString());
     };
 
     return self;
