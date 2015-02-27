@@ -2,7 +2,7 @@
 var assert = require('assert');
 
 describe('Util', function(){
-    describe('#hellp', function(){
+    describe('#help', function(){
         it('Should call log with the correct table', function(){
             assert(false);
         });
