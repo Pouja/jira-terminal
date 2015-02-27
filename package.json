@@ -35,5 +35,16 @@
     "nodejs"
   ],
   "author": "http://www.github.com/Pouja/",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://Pouja@github.com/Pouja/jira-terminal"
+  },
+  "bugs": {
+    "url": "https://github.com/Pouja/jira-terminal/issues"
+  },
+  "homepage": "https://github.com/Pouja/jira-terminal"
 }
