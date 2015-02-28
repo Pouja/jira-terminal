@@ -103,7 +103,7 @@ module.exports = function(jiraApi, argv) {
      * @return {Q}
      */
     self.add = function() {
-        var filePath = __dirname + '/.BUFFERED_MESSSAGE';
+        var filePath = __dirname + '/.BUFFERED_MESSAGE';
         var id = argv.i || argv._[2];
         var deferred = Q.defer();
 
