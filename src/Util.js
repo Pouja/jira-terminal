@@ -208,14 +208,15 @@ var Util = function() {
      * Formats the sentences by appling line breaks so that the asciitable does not break.
      * @param {String} sentence The sentence to be formatted.
      * @param {Number} emptySpace The amount of space that is already take by the other columns.
+     * @param {Number} width (Optional) The custom width to use.
      * return {String} the sentence with line breaks.
      */
-    self.setLinebreaks = function(rawSentence, emptySpace) {
-        var width = process.stdout.columns - emptySpace;
+    self.setLinebreaks = function(rawSentence, emptySpace, width) {
+        width = width || process.stdout.columns - emptySpace;
         var words = rawSentence.split(' ');
 
         // Will contain all the sentences with additional line breaks
-        var sentences = '';
+        var sentences = words.shift();
 
         // Length is the number of characters since the last line break
         var length = 0;
@@ -245,7 +246,7 @@ var Util = function() {
      * @param {Boolean} table.filter (Optional) Default true. Indicate if it should filter if the argument is given.
      */
     self.createAsciiTable = function(table) {
-        if (table.head || table.rows) {
+        if (table && (table.head || table.rows)) {
             if (!table.sort && argv.t !== undefined) {
                 self._sort(table, argv.t);
             }
@@ -279,6 +280,7 @@ var Util = function() {
     /**
      * Pretty prints the which arguments can be run with the given description.
      * The first row should contain the argument(s) and the second row should contain the description.
+     * @param {Array} rows.
      */
     self.help = function(rows) {
         var table = new CliTable({

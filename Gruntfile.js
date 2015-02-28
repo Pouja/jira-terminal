@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                 options: {
                     reporter: 'spec',
                 },
+                require: ['should'],
                 src: ['test/**/*.js']
             }
         },
