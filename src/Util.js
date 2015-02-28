@@ -5,6 +5,8 @@ var config = require('../config.json');
 var NodeUtil = require('util');
 var shell = require('shelljs');
 var debug = require('debug')('util');
+var editor = require('editor');
+var Q = require('q');
 
 var Util = function() {
     var self = {};
@@ -183,6 +185,23 @@ var Util = function() {
      */
     self.cleanSentence = function(sentence) {
         return sentence.replace(/\'|\r|\t/g, '');
+    };
+
+    /**
+    * A wrapper around the package editor.
+    * @param {String} filePath The path including the filename to where the file should be stored.
+    * @return {Q}
+    */
+    self.openEditor = function(filePath) {
+        var deffered = Q.defer();
+        editor(filePath, function(code){
+            if(code !== null || code !== undefined){
+                deffered.resolve();
+            } else {
+                deffered.reject();
+            }
+        });
+        return deffered.promise;
     };
 
     /**
