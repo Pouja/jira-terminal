@@ -150,11 +150,11 @@ module.exports = function(jiraApi, argv) {
      */
     self.printHelp = function() {
         Util.help([
-            ['Usages: comment', '[add -m "YOUR MESSAGE"] [ID', 'help']
+            ['Usages: comment', '[add -i ID] [add ID] [ID] [help]']
         ]);
         Util.log();
         var helps = [
-            ['add', 'Adds a new comment.'],
+            ['add', 'Adds a new comment. Opens your editor for adding a new comment.'],
             ['ID', 'Retrieves all the comments for that ID.'],
             ['help', 'Prints these message.']
         ];
