@@ -36,10 +36,10 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-    * Converts a raw comment to a readable (for terminal) string
-    * @param {Object} comment The comment as returned by the api.
-    * @return {String} a pretty string with hashes.
-    */
+     * Converts a raw comment to a readable (for terminal) string
+     * @param {Object} comment The comment as returned by the api.
+     * @return {String} a pretty string with hashes.
+     */
     var makePrettyComment = function(comment) {
         var newLine = '\n#\t';
         var body = Util.setLinebreaks(Util.cleanSentence(comment.body), emptySpace)
@@ -56,10 +56,10 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-    * Converts the raw comments in the issue to a pretty format for in the terminal
-    * @param {Object} issue The issue object as returned by the api.
-    * @return {String} A pretty format to be shown in a file or terminal.
-    */
+     * Converts the raw comments in the issue to a pretty format for in the terminal
+     * @param {Object} issue The issue object as returned by the api.
+     * @return {String} A pretty format to be shown in a file or terminal.
+     */
     var makePrettyComments = function(issue, id) {
         var newLine = '\n# ';
         var pretty = [
@@ -81,10 +81,10 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
-    * Generates a file containing the last n comments of the issue.
-    * @param {String|Number} id The indentifier of the issue.
-    * @return {Q}
-    */
+     * Generates a file containing the last n comments of the issue.
+     * @param {String|Number} id The indentifier of the issue.
+     * @return {Q}
+     */
     var generateBufferedMessage = function(id) {
         var deferred = Q.defer();
         Q.ninvoke(jiraApi, 'findIssue', id)
@@ -132,9 +132,11 @@ module.exports = function(jiraApi, argv) {
                     return Q.ninvoke(jiraApi, 'addComment', id, message);
                 }
             })
-            .then(function() {
+            .then(function(response) {
                     deferred.resolve();
-                    Util.log('Added the comment to issue %s', id);
+                    if(response) {
+                        Util.log('Added the comment to issue %s', id);
+                    }
                 },
                 function(err) {
                     Util.error('Error adding a comment for issue %s.\nError says %j', id, err);
