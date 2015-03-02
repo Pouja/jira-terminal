@@ -10,6 +10,7 @@ Currently I'm still developing on this. So this is in no means ready to use and 
  * Search command with jql syntax.
  * Auto complete in terminal.
  * Oauth and better config file. Currently you have set your jira user name and password in a config file which is unsafe of course.I'll be lazy to do this since JIRA only supports oauth1 and oauth1 is a bitch.
+ * Extend the Filter plugin with showing which issues were edited since it the last time.
 
 # Install
 Edit the config file, see `example.config.json`.
