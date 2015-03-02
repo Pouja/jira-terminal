@@ -9,7 +9,7 @@ module.exports = function(jiraApi, argv) {
     argv = argv || require('minimist')(process.argv.slice(2));
 
     // Used for adding a comment
-    var emptySpace = 40;
+    var emptySpace = 50;
 
     // The maximum number of comments to be shown in the editor when adding a new comment.
     var maxComments = 3;
