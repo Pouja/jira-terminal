@@ -41,17 +41,17 @@ module.exports = function(jiraApi, argv) {
      * @return {String} a pretty string with hashes.
      */
     var makePrettyComment = function(comment) {
-        var newLine = '\n#\t';
-        var body = Util.setLinebreaks(Util.cleanSentence(comment.body), emptySpace)
+        var newLine = '\n# ';
+        var body = Util.setLinebreaks(comment.body, emptySpace)
             .replace(/\n/g, newLine);
         return [
-            comment.author.displayName,
+            '# ' + comment.author.displayName,
             '\t',
             moment(comment.updated).format('YYYY-MM-DD HH:mm:ss'),
             newLine,
             body,
             newLine,
-            '\n# '
+            '\n'
         ].join('');
     };
 
@@ -60,19 +60,15 @@ module.exports = function(jiraApi, argv) {
      * @param {Object} issue The issue object as returned by the api.
      * @return {String} A pretty format to be shown in a file or terminal.
      */
-    var makePrettyComments = function(issue, id) {
-        var newLine = '\n# ';
+    var makePrettyComments = function(issue) {
+        var summary = issue.id + ' (' + issue.key + ')\t' + issue.fields.summary;
+        summary = Util.setLinebreaks(summary, emptySpace)
+            .replace(/\n/g, '\n# ');
         var pretty = [
-            newLine,
-            newLine,
-            'Type the comment you want to add to issue ' + id + '.',
-            newLine,
-            'All lines starting with # will be ignore.',
-            newLine,
-            newLine,
-            'The last ' + maxComments + ' comments are:',
-            newLine,
-            newLine
+            '\n#\n# Type the comment you want to add to issue: \n',
+            '# ' + summary + '\n',
+            '#\n# All lines starting with # will be ignore.\n',
+            '#\n# The last ' + maxComments + ' comments are:\n',
         ];
         if (issue.fields.comment && issue.fields.comment.comments.length !== 0) {
             pretty = pretty.concat(_.map(issue.fields.comment.comments, makePrettyComment));
@@ -92,7 +88,7 @@ module.exports = function(jiraApi, argv) {
                 if (!issue) {
                     deferred.reject('No issue found with id %s.', id);
                 }
-                deferred.resolve(makePrettyComments(issue, id));
+                deferred.resolve(makePrettyComments(issue));
             }, deferred.reject)
             .done();
         return deferred.promise;
