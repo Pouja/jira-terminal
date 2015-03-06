@@ -8,6 +8,7 @@
     "colors": "^1.0.3",
     "config": "^1.10.0",
     "debug": "^2.1.1",
+    "editor": "^0.1.0",
     "jira": "git://github.com/Pouja/node-jira#master",
     "lodash": "^3.0.1",
     "minimist": "^1.1.0",
