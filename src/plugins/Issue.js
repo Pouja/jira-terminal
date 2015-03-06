@@ -9,7 +9,7 @@ module.exports = function(jiraApi, argv) {
     var self = {
         name: 'Issue',
         pattern: 'issue',
-        help: 'start, stop or retrieve information about a specific issue'
+        help: 'new, start, stop or retrieve information about a specific issue'
     };
 
     /**
@@ -37,13 +37,19 @@ module.exports = function(jiraApi, argv) {
      */
     self.helpHandler = function() {
         Util.help([
-            ['Usages: issue', '[get ID] [start -i ID] [start ID] [start -i ID --brach] [start -i ID --brach --checkout] [stop -i ID -s STATUS -m MESSAGE]']
+            ['Usages: issue',
+                Util.setLinebreaks('[get ID] [start -i ID] [start ID] ' +
+                    '[start -i ID --brach] [start -i ID --brach --checkout] ' +
+                    '[stop -i ID -s STATUS -m MESSAGE] ' +
+                    '[new -t TYPE -p PROJECT -m MESSAGE]', 40)
+            ]
         ]);
         Util.log();
         var helps = [
             ['get', 'prints additional information about the given issue id, you can also create a branch and or checkout'],
             ['start', 'performs transition id 4 on the given issue id'],
-            ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message']
+            ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message'],
+            ['new', 'creates a new issue, the first line of the message is the summary, the following lines are the description']
         ];
         Util.help(helps);
 
@@ -195,5 +201,35 @@ module.exports = function(jiraApi, argv) {
         return deferred.promise;
     };
 
+    self.newHandler = function() {
+        var deferred = Q.defer();
+        if (argv.p || argv.t) {
+            Util.error('Incorrect usage of \'issue new\', see \'issue help\'for more information.');
+            deferred.reject();
+            return deferred.promise;
+        }
+        var message = (argv.m) ? argv.m : '';
+
+        var issue = {
+            fields: {
+                project: {
+                    name: argv.p
+                },
+                type: {
+                    name: argv.t
+                }
+            }
+        };
+
+        Q.ninvoke(jiraApi, 'addNewIssue', issue)
+            .then(function(issueKey) {
+                Util.log('Succesfull created new issue under key %s.\nThe link is %', issueKey.key, issueKey.self);
+                deferred.resolve();
+            }, function(error) {
+                Util.error('Error creating a new issue. The error that was retrieved is %j', err);
+                deferred.reject();
+            });
+        return deferred.promise;
+    };
     return self;
 };
