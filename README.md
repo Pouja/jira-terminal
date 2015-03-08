@@ -9,7 +9,7 @@ Currently I'm still developing on this. So this is in no means ready to use and 
  * Create a new issue.
  * Search command with jql syntax.
  * Auto complete in terminal.
- * Oauth and better config file. Currently you have set your jira user name and password in a config file which is unsafe of course.I'll be lazy to do this since JIRA only supports oauth1 and oauth1 is a bitch.
+ * Oauth and better config file. **Currently you have set your jira user name and password in a config file which is unsafe.** After version 0.1.0 this has the highest priority.
  * Extend the Filter plugin with showing which issues were edited since it the last time.
 
 # Install
