@@ -1,11 +1,11 @@
 # Jira Terminal
 Let's go away from that ugly GUI of jira and lets just stick to our terminals.  
-I started, created this project to improve my work flow. I was already using git, npm, grunt, bower ... etc. in my terminal, I wanted to use JIRA as well in my terminal.
+I  started/created this project to improve my work flow. I was already using git, npm, grunt, bower ... etc. in my terminal, I wanted to use JIRA as well in my terminal.
 
-Currently I'm still developing on this. So this is in no means ready to use and replaces everything of the GUI etc etc. But it is a start.
+Currently I'm still developing on this. So this is in no means ready to use and replaces everything of the GUI. But it is a start.
 
 # Work in progress
- * Custom transitions (let the user define through a json file how `issue start` and `issue stop` should work, also let the user add more `issue` commands through configuring an json).
+ * Let the user the transitions defined in **their** JIRA application. Currently I hard coded for `issue start/stop` our transition ids for starting and stopping an issue.
  * Create a new issue.
  * Search command with jql syntax.
  * Auto complete in terminal.
