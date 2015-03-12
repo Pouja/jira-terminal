@@ -65,17 +65,17 @@ module.exports = function(jiraApi, argv) {
 
         function makeTable(result) {
             var table = {
-                head: ['id', 'summary', 'issuetype', 'status', 'link'],
+                head: ['key', 'summary', 'type', 'status', 'assignee'],
                 rows: []
             };
-
             _.each(result.issues, function(issue) {
+                var assignee = (issue.fields.assignee) ? issue.fields.assignee.name : 'None';
                 table.rows.push([
-                    issue.id,
+                    issue.key,
                     Util.setLinebreaks(issue.fields.summary, 90),
                     issue.fields.issuetype.name,
                     issue.fields.status.name,
-                    Util.makeIssueLink(issue)
+                    assignee
                 ]);
             });
             return table;
