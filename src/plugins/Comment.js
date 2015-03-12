@@ -129,10 +129,11 @@ module.exports = function(jiraApi, argv) {
                 }
             })
             .then(function(response) {
-                    deferred.resolve();
-                    if(response) {
+                    if (response) {
                         Util.log('Added the comment to issue %s', id);
                     }
+                    deferred.resolve();
+
                 },
                 function(err) {
                     Util.error('Error adding a comment for issue %s.\nError says %j', id, err);
