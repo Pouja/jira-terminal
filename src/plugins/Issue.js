@@ -1,6 +1,7 @@
 var Q = require('q');
 var debugErr = require('debug')('plugin:Issue:error');
 var Util = require('../Util.js');
+var fs = require('fs');
 
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
@@ -41,7 +42,7 @@ module.exports = function(jiraApi, argv) {
                 Util.setLinebreaks('[get ID] [start -i ID] [start ID] ' +
                     '[start -i ID --brach] [start -i ID --brach --checkout] ' +
                     '[stop -i ID -s STATUS -m MESSAGE] ' +
-                    '[new -t TYPE -p PROJECT -m MESSAGE]', 40)
+                    '[new -t TYPE -p PROJECT]', null, 80)
             ]
         ]);
         Util.log();
@@ -49,7 +50,7 @@ module.exports = function(jiraApi, argv) {
             ['get', 'prints additional information about the given issue id, you can also create a branch and or checkout'],
             ['start', 'performs transition id 4 on the given issue id'],
             ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message'],
-            ['new', 'creates a new issue, the first line of the message is the summary, the following lines are the description']
+            ['new', 'creates a new issue']
         ];
         Util.help(helps);
 
@@ -201,29 +202,55 @@ module.exports = function(jiraApi, argv) {
         return deferred.promise;
     };
 
+    var generateMessage = function(issue) {
+        return ['\n# Write the summary and description for a new issue for ',
+            issue.fields.project.key,
+            ' with type ',
+            issue.fields.issuetype.name,
+            '\n# The first line will be the summary, all lines after that will be the summary.',
+            '\n# All lines starting with # will be ignored.'
+        ].join('');
+    }
+
     self.newHandler = function() {
         var deferred = Q.defer();
-        if (argv.p || argv.t) {
+        var filePath = __dirname + '/.BUFFERED_MESSAGE';
+
+        if (!argv.p || !argv.t) {
             Util.error('Incorrect usage of \'issue new\', see \'issue help\'for more information.');
             deferred.reject();
             return deferred.promise;
         }
-        var message = (argv.m) ? argv.m : '';
 
         var issue = {
             fields: {
                 project: {
-                    name: argv.p
+                    key: argv.p
                 },
-                type: {
+                issuetype: {
                     name: argv.t
                 }
             }
         };
 
-        Q.ninvoke(jiraApi, 'addNewIssue', issue)
+        fs.writeFileSync(filePath, generateMessage(issue), 'utf8');
+        Util.openEditor(filePath)
+            .then(function() {
+                var message = fs.readFileSync(filePath, 'utf8').replace(/\n#.*/g, '');
+
+                if (message.trim() === '') {
+                    throw 'The body was empty, the submit was aborted.';
+                }
+
+                var messages = message.split('\n');
+                issue.fields.summary = messages.shift();
+                issue.fields.description = messages.join('\n').trim();
+
+                return Q.ninvoke(jiraApi, 'addNewIssue', issue)
+            })
             .then(function(issueKey) {
-                Util.log('Succesfull created new issue under key %s.\nThe link is %', issueKey.key, issueKey.self);
+                Util.log('Succesfull created new issue under key %s.\nThe link is %s', issueKey.key,
+                    Util.makeIssueLink(issueKey.key));
                 deferred.resolve();
             }, function(error) {
                 Util.error('Error creating a new issue. The error that was retrieved is %j', err);
