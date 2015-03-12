@@ -73,10 +73,11 @@ var Util = function(argv) {
                 var branchType = config.git.nameMapping[type] || config.git.nameMapping._;
                 branchName += branchType + '/';
             }
-            var summary = shortenSentence(issue.fields.summary).replace(/\ /g, '-').toLowerCase();
-
-            // Remove all special characters, git/terminal will break on those.
-            summary.replace(/[^\w\s]/gi, '');
+            var summary = shortenSentence(issue.fields.summary)
+                .replace(/\ /g, '-')
+                // Remove all special characters, git/terminal will break on those.
+                .replace(/[^\w\s-]/gi, '')
+                .toLowerCase();
 
             branchName += issue.key + '-' + summary;
             self.makeBranch(branchName);

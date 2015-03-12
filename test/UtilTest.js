@@ -42,12 +42,12 @@ describe('Util', function() {
     });
     describe('#_filter', function() {
         it('Should throw when an boolean is given as filter', function() {
-            (function(){
+            (function() {
                 Util._filter({});
             }).should.throw();
         });
         it('Should throw when an zero length string is given as filter', function() {
-            (function(){
+            (function() {
                 Util._filter({}, '');
             }).should.throw();
         });
@@ -115,17 +115,60 @@ describe('Util', function() {
         });
     });
     describe('#branch', function() {
-        beforeEach(function(){
-            Util = require('../src/Util.js')();
+        var argv = {};
+        beforeEach(function() {
+            Util = require('../src/Util.js')(argv);
         });
         it('Should do nothing when branch flag is not set', function() {
-            Util.makeBranch = function(){
+            Util.makeBranch = function() {
                 assert(false, 'I should not be called');
             };
             Util.branch();
         });
-        it('Should call make branch and checkout with the correct arguments', function() {
-            assert(false);
+        it('Should call make a branch name with only the key and summary', function() {
+            argv = {
+                branch: true
+            };
+            Util.makeBranch = function(branchName) {
+                branchName.should.equal('TEST-a-small-summary');
+            };
+            Util.branch({
+                key: 'TEST',
+                fields: {
+                    summary: 'a small summary'
+                }
+            });
+        });
+        it('Should make the correct branch name without special characters', function() {
+            argv = {
+                branch: true
+            };
+            Util.makeBranch = function(branchName) {
+                branchName.should.equal('TEST-a-small-2summary');
+            };
+            Util.branch({
+                key: 'TEST',
+                fields: {
+                    summary: 'a \'small *2!$#summary @)'
+                }
+            });
+        });
+        it('Should make the correct branch name with the correct type', function() {
+            argv = {
+                branch: true
+            };
+            Util.makeBranch = function(branchName) {
+                branchName.should.equal('bugfix/TEST-a-small-2summary');
+            };
+            Util.branch({
+                key: 'TEST',
+                fields: {
+                    summary: 'a \'small *2!$#summary @)',
+                    issuetype: {
+                        name: 'Awesome'
+                    }
+                }
+            });
         });
     });
 });
