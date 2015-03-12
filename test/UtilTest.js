@@ -1,9 +1,12 @@
-var Util = require('../src/Util.js')();
+var Util;
 var assert = require('assert');
 var should = require('should');
 should();
 
 describe('Util', function() {
+    beforeEach(function() {
+        Util = require('../src/Util.js')();
+    });
     describe('#help', function() {
         it('Should call log with the correct table', function() {
             Util.log = function(result) {
@@ -99,19 +102,24 @@ describe('Util', function() {
         });
     });
     describe('#makeIssueLink', function() {
+        beforeEach(function(){
+            Util = require('../src/Util.js')({}, {
+                protocol: 'https',
+                host: 'jira.awesome.com'
+            });
+        });
         it('Should give a pretty link with string as argument', function() {
-            assert(false);
+            Util.makeIssueLink('TEST-1').should.equal('https://jira.awesome.com/browse/TEST-1');
         });
         it('Should give a pretty link with object as argument', function() {
-            assert(false);
+            Util.makeIssueLink({
+                key: 'TEST-1'
+            }).should.equal('https://jira.awesome.com/browse/TEST-1');
         });
         it('Should throw on all other types of argument', function() {
-            assert(false);
-        });
-    });
-    describe('#makeVerticalRows', function() {
-        it('Should make a correct vertical table', function() {
-            assert(false);
+            (function(){
+                Util.makeIssueLink(true);
+            }).should.throw();
         });
     });
     describe('#branch', function() {
