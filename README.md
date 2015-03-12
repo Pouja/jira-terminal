@@ -6,7 +6,6 @@ Currently I'm still developing on this. So this is in no means ready to use and 
 
 # Work in progress
  * Custom transitions (let the user define through a json file how `issue start` and `issue stop` should work, also let the user add more `issue` commands through configuring an json).
- * Create a new issue.
  * Search command with jql syntax.
  * Auto complete in terminal.
  * Oauth and better config file. Currently you have set your jira user name and password in a config file which is unsafe of course.I'll be lazy to do this since JIRA only supports oauth1 and oauth1 is a bitch.
