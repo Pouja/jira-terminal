@@ -1,14 +1,17 @@
 var _ = require('lodash');
 var CliTable = require('cli-table');
-var config = require('../config.json');
 var NodeUtil = require('util');
 var shell = require('shelljs');
 var debug = require('debug')('util');
 var editor = require('editor');
 var Q = require('q');
+var fs = require('fs');
 
-var Util = function(argv) {
+var Util = function(argv, config) {
+    // TODO for now using this method to load the configuration. It should switch to something cleaner.
+    config = config || JSON.parse(fs.readFileSync('./config.json', 'utf8'));
     argv = argv || require('minimist')(process.argv.slice(2));
+
     var self = {};
 
     /**
