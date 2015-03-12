@@ -1,6 +1,6 @@
 {
   "name": "jira-terminal",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Easy shortcuts in terminal to work with jira",
   "main": "app.js",
   "dependencies": {
