@@ -1,5 +1,5 @@
 var Q = require('q');
-var Util = require('../Util.js');
+var Util = require('../Util.js')();
 var _ = require('lodash');
 var moment = require('moment');
 var fs = require('fs');

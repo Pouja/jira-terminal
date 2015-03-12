@@ -1,6 +1,5 @@
 var _ = require('lodash');
 var CliTable = require('cli-table');
-var argv = require('minimist')(process.argv.slice(2));
 var config = require('../config.json');
 var NodeUtil = require('util');
 var shell = require('shelljs');
@@ -8,7 +7,8 @@ var debug = require('debug')('util');
 var editor = require('editor');
 var Q = require('q');
 
-var Util = function() {
+var Util = function(argv) {
+    argv = argv || require('minimist')(process.argv.slice(2));
     var self = {};
 
     /**
@@ -319,4 +319,4 @@ var Util = function() {
 };
 
 // We want a singleton
-module.exports = new Util();
+module.exports = Util;

@@ -1,6 +1,6 @@
 var Q = require('q');
 var debugErr = require('debug')('plugin:Issue:error');
-var Util = require('../Util.js');
+var Util = require('../Util.js')();
 var fs = require('fs');
 
 module.exports = function(jiraApi, argv) {
@@ -202,6 +202,11 @@ module.exports = function(jiraApi, argv) {
         return deferred.promise;
     };
 
+    /**
+    * Generates a message for when adding a new issue.
+    * @param {Object} issue.fields Should have only the project.key and issuetype.name
+    * @return A message.
+    */
     var generateMessage = function(issue) {
         return ['\n# Write the summary and description for a new issue for ',
             issue.fields.project.key,
@@ -210,8 +215,13 @@ module.exports = function(jiraApi, argv) {
             '\n# The first line will be the summary, all lines after that will be the summary.',
             '\n# All lines starting with # will be ignored.'
         ].join('');
-    }
+    };
 
+    /**
+    * Creates a new issue.
+    * The only params required are -p the project key and -t the type of bug (case senstitive).
+    * @return {Q}
+    */
     self.newHandler = function() {
         var deferred = Q.defer();
         var filePath = __dirname + '/.BUFFERED_MESSAGE';
@@ -246,14 +256,14 @@ module.exports = function(jiraApi, argv) {
                 issue.fields.summary = messages.shift();
                 issue.fields.description = messages.join('\n').trim();
 
-                return Q.ninvoke(jiraApi, 'addNewIssue', issue)
+                return Q.ninvoke(jiraApi, 'addNewIssue', issue);
             })
             .then(function(issueKey) {
                 Util.log('Succesfull created new issue under key %s.\nThe link is %s', issueKey.key,
                     Util.makeIssueLink(issueKey.key));
                 deferred.resolve();
             }, function(error) {
-                Util.error('Error creating a new issue. The error that was retrieved is %j', err);
+                Util.error('Error creating a new issue. The error that was retrieved is %j', error);
                 deferred.reject();
             });
         return deferred.promise;

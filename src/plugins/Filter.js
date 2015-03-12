@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var Q = require('q');
-var Util = require('../Util.js');
+var Util = require('../Util.js')();
 var NodeUtil = require('util');
 /**
  * The filter plugin.

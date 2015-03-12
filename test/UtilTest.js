@@ -1,4 +1,4 @@
-var Util = require('../src/Util.js');
+var Util = require('../src/Util.js')();
 var assert = require('assert');
 var should = require('should');
 should();
@@ -115,8 +115,14 @@ describe('Util', function() {
         });
     });
     describe('#branch', function() {
+        beforeEach(function(){
+            Util = require('../src/Util.js')();
+        });
         it('Should do nothing when branch flag is not set', function() {
-            assert(false);
+            Util.makeBranch = function(){
+                assert(false, 'I should not be called');
+            };
+            Util.branch();
         });
         it('Should call make branch and checkout with the correct arguments', function() {
             assert(false);
