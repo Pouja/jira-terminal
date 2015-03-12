@@ -7,8 +7,13 @@ var editor = require('editor');
 var Q = require('q');
 var fs = require('fs');
 
+/**
+* A collection of utility functions.
+* @param {Object} argv (Optional) Uses minimist if this is not set.
+* @param {Object} config (Optional) Uses ./config.json if this is not set.
+*/
 var Util = function(argv, config) {
-    // TODO for now using this method to load the configuration. It should switch to something cleaner.
+    // TODO switch to using the config library
     config = config || JSON.parse(fs.readFileSync('./config.json', 'utf8'));
     argv = argv || require('minimist')(process.argv.slice(2));
 
