@@ -15,7 +15,8 @@
     "moment": "^2.9.0",
     "prompt": "^0.2.14",
     "q": "^1.1.2",
-    "shelljs": "^0.3.0"
+    "shelljs": "^0.3.0",
+    "which": "^1.0.9"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
