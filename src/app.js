@@ -8,7 +8,7 @@ if (uid) {
 
 // Check for the existence of the config file.
 try {
-    var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+    var config = JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
 } catch (error) {
     if (error.code !== 'ENOENT') {
         throw error;

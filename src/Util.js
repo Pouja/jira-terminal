@@ -14,7 +14,7 @@ var fs = require('fs');
 */
 var Util = function(argv, config) {
     // TODO switch to using the config library
-    config = config || JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+    config = config || JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
     argv = argv || require('minimist')(process.argv.slice(2));
 
     var self = {};
