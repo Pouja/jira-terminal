@@ -1,50 +1,54 @@
-// For some reason jshint says that Comment is already defined :S
+// For some reason jshint says that Comment is already defined :/
 var CommentConstr = require('../src/plugins/Comment.js');
 var comment;
+var argv;
+var jiraApi;
 var assert = require('assert');
 
 describe('plugin:comment', function() {
     describe('#hook', function() {
-        var argv = {};
-        comment = new CommentConstr({}, argv);
-        it('should call add', function(done){
+        before(function(){
+            argv = {};
+            comment = new CommentConstr({}, argv);
+        });
+        it('should call add', function(done) {
             argv._ = [null, 'add'];
-            comment.add = function(){
+            comment.add = function() {
                 done();
             };
             comment.hook();
         });
-        it('should call help', function(done){
+        it('should call help', function(done) {
             argv._ = [null, 'help'];
-            comment.printHelp = function(){
+            comment.printHelp = function() {
                 done();
             };
             comment.hook();
         });
-        it('should call add', function(done){
+        it('should call add', function(done) {
             argv._ = [null, 'TEST-1'];
-            comment.show = function(){
+            comment.show = function() {
                 done();
             };
             comment.hook();
         });
     });
-    describe('#add', function(){
-        it('should throw when id is not set', function(){
-            assert(false);
+    describe('#add', function() {
+        before(function() {
+            argv = {};
+            comment = new CommentConstr(jiraApi, argv);
         });
-        it('it should not call jiraApi.addComment when body is empty', function(){
-            assert(false);
-        });
-        it('should succeed when id is set correclty and body is not empty', function(){
-            assert(false);
+        it('should throw when id is not set', function() {
+            (function() {
+                comment.add();
+            }).should.throw();
         });
     });
-    describe('#show', function(){
-        it('Should fail when no issue was find matching the id', function(){
+    describe('#show', function() {
+        it('Should fail when no issue was found matching the id', function() {
             assert(false);
         });
-        it('should succeed', function(){
+        it('should succeed', function() {
             assert(false);
         });
     });
