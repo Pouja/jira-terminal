@@ -6,13 +6,13 @@ echo "-----------------------------------------"
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
-SHELLSCRIPT="#!/bin/sh\nnode $SCRIPTPATH/src/app.js \$*\n"
+SHELLSCRIPT="#!/bin/bash\nnode $SCRIPTPATH/src/app.js \$*\n"
 
 echo -e $SHELLSCRIPT >> jira-terminal
 chmod +x jira-terminal
 
 if [ "$(whoami)" != "root" ]; then
-	echo "Im not root. So please move the shell script 'jira-terminal' to your bin folder" 
+	echo "Im not root. So please move the shell script 'jira-terminal' to your bin folder"
 else
 	echo "Copying 'jira-terminal' to /usr/bin/"
 	mv jira-terminal /usr/bin/jira-terminal
