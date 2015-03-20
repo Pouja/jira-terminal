@@ -77,7 +77,9 @@ module.exports = function(jiraApi, argv) {
                 key: 'key'
             }, {
                 name: 'summary',
-                key: 'fields.summary'
+                key: 'fields.summary',
+                linebreaks: true,
+                emptySpace: 50
             }, {
                 name: 'issue type',
                 key: 'fields.issuetype.name'
@@ -88,7 +90,7 @@ module.exports = function(jiraApi, argv) {
                 name: 'description',
                 key: 'fields.description',
                 linebreaks: true,
-                emptySpace: 40
+                emptySpace: 50
             }, {
                 name: 'status',
                 key: 'fields.status.name'
