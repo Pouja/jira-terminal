@@ -65,7 +65,7 @@ module.exports = function(jiraApi, argv) {
         summary = Util.setLinebreaks(summary, emptySpace)
             .replace(/\n/g, '\n# ');
         var pretty = [
-            '\n#\n# Type the comment you want to add to issue: \n',
+            '\n# Type the comment you want to add to issue: \n',
             '# ' + summary + '\n',
             '#\n# All lines starting with # will be ignore.\n',
             '#\n# The last ' + maxComments + ' comments are:\n',
