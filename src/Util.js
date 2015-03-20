@@ -228,7 +228,7 @@ var Util = function(argv, config) {
         var words = rawSentence.split(' ');
 
         // Will contain all the sentences with additional line breaks
-        var sentences = words.shift();
+        var sentences = words.shift() + ' ';
 
         // Length is the number of characters since the last line break
         var length = 0;
@@ -321,6 +321,7 @@ var Util = function(argv, config) {
         _.each(rows, function(row) {
             table.push(row);
         });
+
         self.log(table.toString());
     };
 

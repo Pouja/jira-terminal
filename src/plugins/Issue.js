@@ -40,7 +40,7 @@ module.exports = function(jiraApi, argv) {
         Util.help([
             ['Usages: issue',
                 Util.setLinebreaks('[get ID] [start -i ID] [start ID] ' +
-                    '[start -i ID --brach] [start -i ID --brach --checkout] ' +
+                    '[start -i ID --branch] [start -i ID --branch --checkout] ' +
                     '[stop -i ID -s STATUS -m MESSAGE] ' +
                     '[new -t TYPE -p PROJECT]', null, 80)
             ]
