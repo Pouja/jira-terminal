@@ -166,6 +166,9 @@ module.exports = function(jiraApi, argv) {
             return question;
         });
 
+        Util.log('Some fields are required to fill in for this transition.');
+        Util.log('All fields which are optional can stay empty, just press [enter] then.');
+
         // Get the answers to the questions.
         prompt.multi(questions, function(answers) {
 
