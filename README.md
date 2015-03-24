@@ -5,7 +5,6 @@ I  started/created this project to improve my work flow. I was already using git
 Currently I'm still developing on this. So this is in no means ready to use and replaces everything of the GUI. But it is a start.
 
 # Work in progress
- * Let the user the transitions defined in **their** JIRA application. Currently I hard coded for `issue start/stop` our transition ids for starting and stopping an issue.
  * Search command with jql syntax.
  * Auto complete in terminal.
  * Oauth and better config file. **Currently you have set your jira user name and password in a config file which is unsafe.** After version 0.1.0 this has the highest priority.
