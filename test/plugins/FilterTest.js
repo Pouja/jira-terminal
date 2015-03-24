@@ -1,4 +1,4 @@
-var Filter = require('../src/plugins/Filter.js');
+var Filter = require('../../src/plugins/Filter.js');
 var filter;
 
 describe('plugin:filter', function() {

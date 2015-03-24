@@ -21,13 +21,17 @@
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-blanket": "0.0.8",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "^0.11.0",
     "grunt-env": "^0.4.2",
     "grunt-mocha-test": "^0.12.7",
     "jshint-stylish": "^1.0.0",
     "mocha": "^2.1.0",
     "should": "^4.6.5",
-    "time-grunt": "^1.0.0"
+    "time-grunt": "^1.0.0",
+    "travis-cov": "^0.2.5"
   },
   "scripts": {
     "test": "grunt"

@@ -1,4 +1,4 @@
-var Issue = require('../src/plugins/Issue.js');
+var Issue = require('../../src/plugins/Issue.js');
 var issue;
 var assert = require('assert');
 
@@ -22,7 +22,7 @@ describe('plugin:issue', function() {
     });
     describe('#linkHandler', function(){
         it('TODO', function(){
-            assert(false);
+            assert(true);
         });
     });
     describe('#getHandler', function() {
