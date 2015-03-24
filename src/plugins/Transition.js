@@ -85,32 +85,75 @@ module.exports = function(jiraApi, argv) {
     };
 
     /**
+     * Searches all the possible transition for 'issue' that has an id/name that matches 'name'.
+     * @param {String|Number} issue The issue id/key.
+     * @param {String|Number} name The name/id of the transition.
+     * @return {Q}.
+     */
+    var fetchId = function(issue, name) {
+        var deferred = Q.defer();
+        Q.ninvoke(jiraApi, 'listTransitions', issue)
+            .then(function(transitions) {
+                var transition = _.find(transitions.transitions, function(transition) {
+                    // The name can be a string of only numbers due minimist parses everything as strings..
+                    return transition.id == name || transition.name === name;
+                });
+                if (!transition) {
+                    throw 'No transitions found or is possible with id/name ' + name + ' for issue ' + issue + '.';
+                }
+                deferred.resolve(transition);
+            }, deferred.reject)
+            .done();
+        return deferred.promise;
+    };
+
+    /**
+    * Fetches the issue and makes a branch if 'branch' is set to true.
+    * @param {String|Number} issueKey The issue id/key.
+    * @param {Boolean} branch Set to true if it should branch.
+    * return {Q}
+    */
+    var makeBranch = function(issueKey, branch) {
+        var deferred = Q.defer();
+        if (branch) {
+            Q.ninvoke(jiraApi, 'findIssue', issueKey)
+                .then(function(issue) {
+                    if (issue) {
+                        Util.branch(issue);
+                    }
+                    deferred.resolve();
+                }, deferred.reject)
+                .done();
+        } else {
+            deferred.resolve();
+        }
+        return deferred.promise;
+    };
+
+    /**
      * Prints out all the possible transitions for the given issue key/id.
      * @return {Q}
      */
     self.applyTransition = function() {
         var deferred = Q.defer();
-        var issue = argv._[1];
-        var body = {
-            transition: {
-                id: argv._[2]
-            }
-        };
+        var issueKey = argv._[1];
+        var transId = argv._[2];
 
-        Q.ninvoke(jiraApi, 'transitionIssue', issue, body)
+        fetchId(issueKey, transId)
+            .then(function(transition) {
+                return Q.ninvoke(jiraApi, 'transitionIssue', issueKey, {
+                    transition: {
+                        id: transition.id
+                    }
+                });
+            })
             .then(function() {
-                if (argv.branch) {
-                    return Q.ninvoke(jiraApi, 'findIssue', issue);
-                }
-                return null;
-            }).then(function(issue) {
-                if (issue && argv.branch) {
-                    Util.branch(issue);
-                }
-                Util.log('Succesfull update issue %s', issue);
+                return makeBranch(issueKey, argv.branch);
+            }).then(function() {
+                Util.log('Succesfull update issue %s', issueKey);
                 deferred.resolve();
             }, function(err) {
-                Util.error('Error starting the issue %s. The error that was retrieved is %j', issue, err);
+                Util.error('Error starting the issue %s. The error that was retrieved is %j', issueKey, err);
                 deferred.reject();
             }).done();
         return deferred.promise;
