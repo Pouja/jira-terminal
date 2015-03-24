@@ -1,5 +1,6 @@
 var Issue = require('../src/plugins/Issue.js');
 var issue;
+var assert = require('assert');
 
 describe('plugin:issue', function() {
     describe('#hook', function() {
@@ -17,6 +18,11 @@ describe('plugin:issue', function() {
             });
             issue.awesomeHandler = done;
             issue.hook().then(done, done);
+        });
+    });
+    describe('#linkHandler', function(){
+        it('TODO', function(){
+            assert(false);
         });
     });
     describe('#getHandler', function() {
