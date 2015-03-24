@@ -68,17 +68,17 @@ module.exports = function(jiraApi, argv) {
                 head: ['key', 'summary', 'type', 'status', 'assignee', 'component'],
                 rows: []
             };
-            _.each(result.issues, function(issue) {
+            table.rows = _.map(result.issues, function(issue) {
                 var components = _.pluck(issue.fields.components, 'name').join(',');
                 var assignee = (issue.fields.assignee) ? issue.fields.assignee.name : 'None';
-                table.rows.push([
+                return [
                     issue.key,
                     Util.setLinebreaks(issue.fields.summary, 90),
                     issue.fields.issuetype.name,
                     issue.fields.status.name,
                     assignee,
                     components
-                ]);
+                ];
             });
             return table;
         }

@@ -39,17 +39,12 @@ module.exports = function(jiraApi, argv) {
     self.helpHandler = function() {
         Util.help([
             ['Usages: issue',
-                Util.setLinebreaks('[get ID] [start -i ID] [start ID] ' +
-                    '[start -i ID --branch] [start -i ID --branch --checkout] ' +
-                    '[stop -i ID -s STATUS -m MESSAGE] ' +
-                    '[new -t TYPE -p PROJECT]', null, 80)
+                Util.setLinebreaks('[get ID] [new -t TYPE -p PROJECT]', null, 80)
             ]
         ]);
         Util.log();
         var helps = [
             ['get', 'prints additional information about the given issue id, you can also create a branch and or checkout'],
-            ['start', 'performs transition id 4 on the given issue id'],
-            ['stop', 'performs transition id 5 on the given issue id, applies the status and adds the message'],
             ['new', 'creates a new issue']
         ];
         Util.help(helps);
@@ -127,82 +122,6 @@ module.exports = function(jiraApi, argv) {
         return deferred.promise;
     };
 
-    /**
-     * Starts an issue based on the transition.
-     * @return {Q}
-     */
-    self.startHandler = function() {
-        var id = argv.i || argv._[2];
-        var deferred = Q.defer();
-
-        if (!id) {
-            Util.error('The ID (-i | 2nd argument) must be supplied.');
-            deferred.reject();
-            return deferred.promise;
-        }
-
-        Q.ninvoke(jiraApi, 'transitionIssue', id, {
-            transition: {
-                id: 4
-            }
-        })
-            .then(function() {
-                if (argv.branch) {
-                    return Q.ninvoke(jiraApi, 'findIssue', id);
-                }
-                return null;
-            }).then(function(issue) {
-                if (issue && argv.branch) {
-                    Util.branch(issue);
-                }
-                Util.log('Succesfull update issue %s', id);
-                deferred.resolve();
-            }, function(err) {
-                Util.error('Error starting the issue %s. The error that was retrieved is %j', id, err);
-                deferred.reject();
-            });
-        return deferred.promise;
-    };
-
-    /**
-     * Stops the issue and adds the message to it with the given status.
-     * @return {Q}
-     */
-    self.stopHandler = function() {
-        var deferred = Q.defer();
-
-        var id = argv.i || argv._[2];
-        var status = argv.s;
-        var message = argv.m;
-
-        if (!status || !id || !message) {
-            Util.error('Incorrect usage of \'issue stop\', see \'issue help\'for more information.');
-            deferred.reject();
-            return deferred.promise;
-        }
-
-        Q.ninvoke(jiraApi, 'transitionIssue', id, {
-            transition: {
-                id: 5
-            },
-            resolution: {
-                name: status
-            },
-            comment: [{
-                add: {
-                    body: message
-                }
-            }]
-        })
-            .then(function() {
-                Util.log('Succesfull update issue %s.', id);
-                deferred.resolve();
-            }, function(err) {
-                Util.error('Error stopping the issue %s. The error that was retrieved is %j', id, err);
-                deferred.reject();
-            });
-        return deferred.promise;
-    };
 
     /**
     * Generates a message for when adding a new issue.
