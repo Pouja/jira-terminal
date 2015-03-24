@@ -4,6 +4,7 @@
   "description": "Easy shortcuts in terminal to work with jira",
   "main": "app.js",
   "dependencies": {
+    "cli-prompt": "^0.4.1",
     "cli-table": "^0.3.1",
     "colors": "^1.0.3",
     "config": "^1.10.0",
@@ -39,6 +40,7 @@
   "author": "http://www.github.com/Pouja/",
   "license": "MIT",
   "directories": {
+    "src": "src",
     "test": "test"
   },
   "repository": {
