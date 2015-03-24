@@ -39,13 +39,16 @@ var Util = function(argv, config) {
     /**
     * @param {String} sentence The sentence to be shorted
     * @param {Number} maxLength The max length the sentence can have.
+    * @param {String} delimiter (Optional) The delimiter between each word.
     * @return {String} a shorted sentece.
     */
-    var shortenSentence = function(sentence, maxLength) {
-        var toLong = sentence.length > maxLength;
-        var s_ = toLong ? sentence.substr(0, maxLength - 1) : sentence;
-        s_ = s_.substr(0, s_.lastIndexOf(' '));
-        return s_;
+    var shortenSentence = function(sentence, maxLength, delimiter) {
+        delimiter = delimiter || ' ';
+        if(sentence.length > maxLength) {
+            var shortend = sentence.substr(0, maxLength - 1);
+            return shortend.substr(0, shortend.lastIndexOf('-'));
+        }
+        return sentence;
     };
 
     /**
@@ -81,11 +84,14 @@ var Util = function(argv, config) {
                 var branchType = config.git.nameMapping[type] || config.git.nameMapping._;
                 branchName += branchType + '/';
             }
-            var summary = shortenSentence(issue.fields.summary)
-                .replace(/\ /g, '-')
+
+            var summary = issue.fields.summary
                 // Remove all special characters, git/terminal will break on those.
                 .replace(/[^\w\s-]/gi, '')
+                .trim()
+                .replace(/\ /g, '-')
                 .toLowerCase();
+            summary = shortenSentence(summary, config.git.branchMaxLength, '-');
 
             branchName += issue.key + '-' + summary;
             self.makeBranch(branchName);

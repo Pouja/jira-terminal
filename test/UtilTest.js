@@ -161,6 +161,34 @@ describe('Util', function() {
                 }
             });
         });
+        it('Should make the correct branch name without slash characters', function() {
+            argv = {
+                branch: true
+            };
+            Util.makeBranch = function(branchName) {
+                branchName.should.equal('TEST-a-small-summary');
+            };
+            Util.branch({
+                key: 'TEST',
+                fields: {
+                    summary: 'a small /summary'
+                }
+            });
+        });
+        it('Should shorten correctly', function() {
+            argv = {
+                branch: true
+            };
+            Util.makeBranch = function(branchName) {
+                branchName.should.equal('TEST-a-small-summary-with-a-very-long-sentence-uhm-i');
+            };
+            Util.branch({
+                key: 'TEST',
+                fields: {
+                    summary: 'a small summary with a very long sentence uhm i dont know'
+                }
+            });
+        });
         it('Should make the correct branch name with the correct type', function() {
             argv = {
                 branch: true
