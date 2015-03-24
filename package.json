@@ -34,7 +34,8 @@
     "travis-cov": "^0.2.5"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "start": "[[ ! $NODE_ENV ]] && NODE_ENV='production' && export NODE_ENV; node src/app.js"
   },
   "keywords": [
     "jira",
@@ -45,7 +46,6 @@
   "license": "MIT",
   "directories": {
     "src": "src",
-    "test": "test"
   },
   "repository": {
     "type": "git",

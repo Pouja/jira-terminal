@@ -11,8 +11,8 @@ Currently I'm still developing on this. So this is in no means ready to use and 
  * Extend the Filter plugin with showing which issues were edited since it the last time.
 
 # Install
-Edit the config file, see `example.config.json`.
-Run `install.sh` it will install all the dependencies and copy a shell script to `/usr/bin/` so you can invoke it with `jira-terminal` from anywhere.
+To install: `npm install -g jira-terminal`.  
+First time running it will promp you with some information to create a config file.
 
 # How to use it
 All the plugins have the `help` commands, IE `jira-terminal issue help`. This also shows what is already implemented.

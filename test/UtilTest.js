@@ -36,7 +36,7 @@ describe('Util', function() {
     describe('#setLinebreaks', function() {
         it('Should correctly break the sentence with enters', function() {
             var result = Util.setLinebreaks('abds asdf as', null, 3);
-            // result.indexOf('\n').should.equal(4);
+            result.indexOf('\n').should.equal(4);
         });
         it('Should apply no breaks since the sentences are short enough', function() {
             var result = Util.setLinebreaks('abds asdf as', null, 100);

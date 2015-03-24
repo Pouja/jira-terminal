@@ -2,17 +2,17 @@ var assert = require('assert');
 describe('Transition', function(){
     describe('#transition', function(){
         it('TODO', function(){
-            assert(true);
+            assert(false);
         });
     });
     describe('#help', function(){
         it('TODO', function(){
-            assert(true);
+            assert(false);
         });
     });
     describe('#apply', function(){
         it('TODO', function(){
-            assert(true);
+            assert(false);
         });
     });
     describe('#hook', function(){
