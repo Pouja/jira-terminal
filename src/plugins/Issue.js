@@ -2,6 +2,8 @@ var Q = require('q');
 var debugErr = require('debug')('plugin:Issue:error');
 var Util = require('../Util.js')();
 var fs = require('fs');
+var which = require('which');
+var shell = require('shelljs');
 
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
@@ -39,13 +41,14 @@ module.exports = function(jiraApi, argv) {
     self.helpHandler = function() {
         Util.help([
             ['Usages: issue',
-                Util.setLinebreaks('[get ID] [new -t TYPE -p PROJECT]', null, 80)
+                Util.setLinebreaks('[get ID] [link ID] [new -t TYPE -p PROJECT]', null, 80)
             ]
         ]);
         Util.log();
         var helps = [
             ['get', 'prints additional information about the given issue id, you can also create a branch and or checkout'],
-            ['new', 'creates a new issue']
+            ['new', 'creates a new issue'],
+            ['link', 'copies the link to the url for the issue to the clipboard']
         ];
         Util.help(helps);
 
@@ -136,6 +139,27 @@ module.exports = function(jiraApi, argv) {
             '\n# The first line will be the summary, all lines after that will be the summary.',
             '\n# All lines starting with # will be ignored.'
         ].join('');
+    };
+
+    /**
+    * Copies the link to issue to the clipboard.
+    * return {Q}
+    */
+    self.linkHandler = function() {
+        var deferred = Q.defer();
+        var id = argv._[2];
+
+        try{
+            which.sync('xclip');
+        } catch(e) {
+            throw 'You need xclip for this.';
+        }
+
+        shell.exec('echo "' + Util.makeIssueLink(id) + '" | xclip -sel clip');
+        Util.log('Copied to clipboard.');
+
+        deferred.resolve();
+        return deferred.promise;
     };
 
     /**
