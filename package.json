@@ -45,7 +45,7 @@
   "author": "http://www.github.com/Pouja/",
   "license": "MIT",
   "directories": {
-    "src": "src",
+    "src": "src"
   },
   "repository": {
     "type": "git",
