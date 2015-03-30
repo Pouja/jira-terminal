@@ -2,12 +2,14 @@ var Util = require('./Util.js')();
 var Jira = require('jira').JiraApi;
 var _ = require('lodash');
 var debug = require('debug')('PluginLoader');
+var fs = require('fs');
+var path = require('path');
 
 /**
-* @param {Array} plugins The name of the plugins to be loaded.
-* @param {Object} jira An Jira API instance.
-* @return {Array} A list of plugin objects.
-*/
+ * @param {Array} plugins The name of the plugins to be loaded.
+ * @param {Object} jira An Jira API instance.
+ * @return {Array} A list of plugin objects.
+ */
 var loadPlugins = function(plugins, jira) {
     return _.map(plugins, function(plugin) {
         var Constr = require('./plugins/' + plugin + '.js');
@@ -17,9 +19,9 @@ var loadPlugins = function(plugins, jira) {
 };
 
 /**
-* Prints out the usages.
-* @param {Array} plugins A list of plugin objects.
-*/
+ * Prints out the usages.
+ * @param {Array} plugins A list of plugin objects.
+ */
 var printHelp = function(plugins) {
     Util.log('\nThe list of all plugins that can be invoked:\n');
     var helps = plugins.map(function(plugin) {
@@ -35,10 +37,10 @@ var printHelp = function(plugins) {
 };
 
 /**
-* Invoke the correct plugin
-* @param {Array} plugins The plugins.
-* @param {String} name The name of the plugin.
-*/
+ * Invoke the correct plugin
+ * @param {Array} plugins The plugins.
+ * @param {String} name The name of the plugin.
+ */
 var invokePlugin = function(plugins, name) {
     var plugin = _.find(plugins, {
         pattern: name
@@ -53,6 +55,23 @@ var invokePlugin = function(plugins, name) {
 };
 
 /**
+ * Retrieves all the plugin names in the directory /src/plugins/
+ * @return {Array} name of all the plugins.
+ */
+var getPluginNames = function() {
+    var files = fs.readdirSync('./src/plugins');
+
+    return _(files)
+        .filter(function(file) {
+            return path.extname(file) === '.js';
+        })
+        .map(function(file) {
+            return path.basename(file, '.js');
+        })
+        .value();
+};
+
+/**
  * Loads all the plugins and calls the corresponding plugin based on the first argument.
  */
 module.exports.run = function(config) {
@@ -61,7 +80,7 @@ module.exports.run = function(config) {
     var jira = new Jira(config.protocol, config.host, config.port, config.username,
         config.password, config.apiVersion || 2);
 
-    var plugins = loadPlugins(config.plugins, jira);
+    var plugins = loadPlugins(getPluginNames(), jira);
     var arg = process.argv[2];
 
     if (!arg || arg === 'help') {

@@ -58,7 +58,6 @@ checkSudo();
 checkEditor();
 
 var config = getConfigFile();
-
 if (config !== null) {
     start(config);
 }
