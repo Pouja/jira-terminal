@@ -1,0 +1,16 @@
+{
+    "protocol": "https",
+    "host": "jira.awesome.com",
+    "port": 443,
+    "username": "john.doe",
+    "password": "a secret",
+    "git": {
+        "default": "master",
+        "branchMaxLength": 50,
+        "nameMapping": {
+            "_": "bugfix",
+            "Story": "feature",
+            "New Feature": "feature"
+        }
+    }
+}
