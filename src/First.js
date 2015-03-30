@@ -3,9 +3,9 @@ var _ = require('lodash');
 var fs = require('fs');
 
 /**
-* This will run on the first time.
-* It will set the password and username etc.
-*/
+ * This will run on the first time.
+ * It will set the password and username etc.
+ */
 module.exports.run = function(cb) {
     var config = {
         'protocol': 'https',
@@ -13,6 +13,15 @@ module.exports.run = function(cb) {
         'port': 443,
         'username': 'john.lee',
         'password': 'secret',
+        'git': {
+            'default': 'master',
+            'branchMaxLength': 50,
+            'nameMapping': {
+                '_': 'bugfix',
+                'Story': 'feature',
+                'New Feature': 'feature'
+            }
+        }
     };
 
     console.log('You will be prompt to fill in some information.');
@@ -34,7 +43,7 @@ module.exports.run = function(cb) {
         var filename = 'jira-terminal-config.json';
 
         var path = answers.path;
-        path += (path[path.length - 1] === '/') ? filename : '/' + filename ;
+        path += (path[path.length - 1] === '/') ? filename : '/' + filename;
         delete answers.path;
 
         _.assign(config, answers);
@@ -46,4 +55,4 @@ module.exports.run = function(cb) {
         console.log('Starting the app.');
         cb(path);
     });
-}
+};

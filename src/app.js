@@ -16,7 +16,7 @@ var start = function(configLocation) {
         console.error('It seems that you removed the configuration file.\nPlease restart the application');
         fs.unlinkSync('./config');
     }
-}
+};
 
 // Make sure the user does not run with sudo since we spawn shell commands.
 var checkSudo = function() {
@@ -24,7 +24,7 @@ var checkSudo = function() {
     if (uid) {
         throw 'You are not allowed to run with sudo!\nThis is done for security reasons!!';
     }
-}
+};
 
 // Check if the editor package will even work
 var checkEditor = function() {
@@ -36,7 +36,7 @@ var checkEditor = function() {
                 'Please either set your env $EDITOR or install vim.';
         }
     }
-}
+};
 
 /**
 * Get the path to the configuration file.
@@ -52,7 +52,7 @@ var getConfigFile = function() {
             .run(start);
     }
     return null;
-}
+};
 
 checkSudo();
 checkEditor();
