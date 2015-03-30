@@ -4,6 +4,7 @@ var _ = require('lodash');
 var debug = require('debug')('PluginLoader');
 var fs = require('fs');
 var path = require('path');
+var Config = require('./Config.js');
 
 /**
  * @param {Array} plugins The name of the plugins to be loaded.
@@ -74,9 +75,8 @@ var getPluginNames = function() {
 /**
  * Loads all the plugins and calls the corresponding plugin based on the first argument.
  */
-module.exports.run = function(config) {
-    config = config || JSON.parse(require('fs').readFileSync('../config.json'));
-
+module.exports.run = function() {
+    var config = Config.load();
     var jira = new Jira(config.protocol, config.host, config.port, config.username,
         config.password, config.apiVersion || 2);
 

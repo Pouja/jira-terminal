@@ -1,7 +1,6 @@
 var Util;
 var assert = require('assert');
 var should = require('should');
-should();
 
 describe('Util', function() {
     beforeEach(function() {
@@ -103,10 +102,7 @@ describe('Util', function() {
     });
     describe('#makeIssueLink', function() {
         beforeEach(function(){
-            Util = require('../src/Util.js')({}, {
-                protocol: 'https',
-                host: 'jira.awesome.com'
-            });
+            Util = require('../src/Util.js')({});
         });
         it('Should give a pretty link with string as argument', function() {
             Util.makeIssueLink('TEST-1').should.equal('https://jira.awesome.com/browse/TEST-1');

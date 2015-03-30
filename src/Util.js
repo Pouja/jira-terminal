@@ -5,16 +5,16 @@ var shell = require('shelljs');
 var debug = require('debug')('util');
 var editor = require('editor');
 var Q = require('q');
-var fs = require('fs');
+var Config = require('./Config');
 
 /**
 * A collection of utility functions.
 * @param {Object} argv (Optional) Uses minimist if this is not set.
 * @param {Object} config (Optional) Uses ./config.json if this is not set.
 */
-var Util = function(argv, config) {
-    // TODO switch to using the config library
-    config = config || JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
+var Util = function(argv) {
+    var config = Config.load();
+
     argv = argv || require('minimist')(process.argv.slice(2));
 
     var self = {};

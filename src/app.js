@@ -1,20 +1,17 @@
 var fs = require('fs');
 var which = require('which');
+var Config = require('./Config.js');
+var First = require('./First.js');
 
 /**
 * Start the app.
 */
-var start = function(configLocation) {
-    try {
-        var config = JSON.parse(fs.readFileSync(configLocation, 'utf8'));
-        require('./PluginLoader.js').run(config);
-
-    } catch (error) {
-        if (error.code !== 'ENOENT') {
-            throw error;
-        }
-        console.error('It seems that you removed the configuration file.\nPlease restart the application');
+var start = function() {
+    if(Config.exists()){
+        require('./PluginLoader.js').run();
+    } else {
         fs.unlinkSync('./config');
+        First.run(start);
     }
 };
 
@@ -38,26 +35,6 @@ var checkEditor = function() {
     }
 };
 
-/**
-* Get the path to the configuration file.
-*/
-var getConfigFile = function() {
-    try {
-        return fs.readFileSync('./config', 'utf8');
-    } catch (e) {
-        if (e.code !== 'ENOENT') {
-            throw e;
-        }
-        require('./First.js')
-            .run(start);
-    }
-    return null;
-};
-
 checkSudo();
 checkEditor();
-
-var config = getConfigFile();
-if (config !== null) {
-    start(config);
-}
+start();
