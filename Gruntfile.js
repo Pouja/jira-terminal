@@ -75,5 +75,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['env:test', 'clean', 'blanket', 'copy', 'mochaTest']);
+    grunt.registerTask('default', ['env:test', 'jshint' ,'clean', 'blanket', 'copy', 'mochaTest']);
 };
