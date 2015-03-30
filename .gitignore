@@ -1,5 +1,7 @@
-config.json
 node_modules
 *sublime*
 coverage
 coverage.html
+config
+jira-terminal-config.json
+*.log
