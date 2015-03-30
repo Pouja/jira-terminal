@@ -34,7 +34,7 @@ module.exports.run = function(cb) {
         key: 'username'
     }, {
         key: 'password',
-        label: 'password (currently this will be save as plain text)',
+        label: 'password (will be save as plain text, or leave it empty but you will be prompt for you password each time)',
         type: 'password'
     }, {
         key: 'path',

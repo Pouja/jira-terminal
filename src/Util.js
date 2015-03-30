@@ -6,6 +6,7 @@ var debug = require('debug')('util');
 var editor = require('editor');
 var Q = require('q');
 var Config = require('./Config');
+var prompt = require('cli-prompt');
 
 /**
 * A collection of utility functions.
@@ -34,6 +35,20 @@ var Util = function(argv) {
             return current !== undefined && current !== null;
         });
         return current;
+    };
+
+    /**
+    * Asks the user for the password
+    * @return {Q}
+    */
+    self.getPassword = function(){
+        var deferred = Q.defer();
+        if(argv.p){
+            deferred.resolve(argv.p);
+        } else {
+            prompt.password('password: ', deferred.resolve);
+        }
+        return deferred.promise;
     };
 
     /**

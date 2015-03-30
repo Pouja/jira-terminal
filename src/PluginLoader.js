@@ -73,10 +73,9 @@ var getPluginNames = function() {
 };
 
 /**
- * Loads all the plugins and calls the corresponding plugin based on the first argument.
- */
-module.exports.run = function() {
-    var config = Config.load();
+* Creates a new jira object and loads all the plugins
+*/
+var init = function(config) {
     var jira = new Jira(config.protocol, config.host, config.port, config.username,
         config.password, config.apiVersion || 2);
 
@@ -87,5 +86,21 @@ module.exports.run = function() {
         printHelp(plugins);
     } else {
         invokePlugin(plugins, arg);
+    }
+};
+
+/**
+ * Loads all the plugins and calls the corresponding plugin based on the first argument.
+ */
+module.exports.run = function() {
+    var config = Config.load();
+    if (!config.password) {
+        Util.getPassword()
+            .then(function(password) {
+                config.password = password;
+                init(config);
+            });
+    } else {
+        init(config);
     }
 };
