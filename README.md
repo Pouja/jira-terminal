@@ -7,7 +7,6 @@ Currently I'm still developing on this. So this is in no means ready to use and 
 # Work in progress
  * Search command with jql syntax.
  * Auto complete in terminal.
- * Oauth and better config file. **Currently you have set your jira user name and password in a config file which is unsafe.** After version 0.1.0 this has the highest priority.
  * Extend the Filter plugin with showing which issues were edited since it the last time.
 
 # Install
