@@ -30,7 +30,7 @@ module.exports = function(jiraApi, argv) {
         } else if (argv._.length === 3) {
             return self.applyTransition();
         } else {
-            return self.help();
+            return self.usages();
         }
     };
 
@@ -39,7 +39,7 @@ module.exports = function(jiraApi, argv) {
      * Prints the usages and the description of each command.
      * @return {Q}
      */
-    self.help = function() {
+    self.usages = function() {
         Util.help([
             ['Usages: transitions', '[help] [ID] [ID NUMBER]']
         ]);
