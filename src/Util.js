@@ -6,7 +6,6 @@ var debug = require('debug')('util');
 var editor = require('editor');
 var Q = require('q');
 var Config = require('./Config');
-var prompt = require('cli-prompt');
 var keytar = require('keytar');
 
 /**
@@ -344,5 +343,4 @@ var Util = function(argv) {
     return self;
 };
 
-// We want a singleton
 module.exports = Util;

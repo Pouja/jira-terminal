@@ -1,4 +1,3 @@
-var fs = require('fs');
 var which = require('which');
 var Config = require('./Config.js');
 var First = require('./First.js');
