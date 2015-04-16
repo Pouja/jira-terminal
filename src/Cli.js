@@ -2,17 +2,6 @@ var which = require('which');
 var Config = require('./Config.js');
 var First = require('./First.js');
 
-/**
-* Start the app.
-*/
-var start = function() {
-    if(Config.exists()){
-        require('./PluginLoader.js').run();
-    } else {
-        First.run(start);
-    }
-};
-
 // Make sure the user does not run with sudo since we spawn shell commands.
 var checkSudo = function() {
     var uid = parseInt(process.env.SUDO_UID);
@@ -33,6 +22,18 @@ var checkEditor = function() {
     }
 };
 
-checkSudo();
-checkEditor();
-start();
+/**
+* Start the app.
+*/
+var start = function() {
+    checkSudo();
+    checkEditor();
+
+    if(Config.exists()){
+        require('./PluginLoader.js').run();
+    } else {
+        First.run(start);
+    }
+};
+
+module.exports = start;

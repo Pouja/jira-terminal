@@ -60,7 +60,7 @@ var invokePlugin = function(plugins, name) {
  * @return {Array} name of all the plugins.
  */
 var getPluginNames = function() {
-    var files = fs.readdirSync('./src/plugins');
+    var files = fs.readdirSync(__dirname + '/plugins');
 
     return _(files)
         .filter(function(file) {
