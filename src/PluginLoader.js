@@ -73,11 +73,12 @@ var getPluginNames = function() {
 };
 
 /**
-* Creates a new jira object and loads all the plugins
-*/
-var init = function(config) {
+ * Loads all the plugins and calls the corresponding plugin based on the first argument.
+ */
+module.exports.run = function() {
+    var config = Config.load();
     var jira = new Jira(config.protocol, config.host, config.port, config.username,
-        config.password, config.apiVersion || 2);
+        Util.getPassword(), config.apiVersion || 2);
 
     var plugins = loadPlugins(getPluginNames(), jira);
     var arg = process.argv[2];
@@ -86,21 +87,5 @@ var init = function(config) {
         printHelp(plugins);
     } else {
         invokePlugin(plugins, arg);
-    }
-};
-
-/**
- * Loads all the plugins and calls the corresponding plugin based on the first argument.
- */
-module.exports.run = function() {
-    var config = Config.load();
-    if (!config.password) {
-        Util.getPassword()
-            .then(function(password) {
-                config.password = password;
-                init(config);
-            });
-    } else {
-        init(config);
     }
 };

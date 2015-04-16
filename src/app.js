@@ -10,7 +10,6 @@ var start = function() {
     if(Config.exists()){
         require('./PluginLoader.js').run();
     } else {
-        fs.unlinkSync('./config');
         First.run(start);
     }
 };

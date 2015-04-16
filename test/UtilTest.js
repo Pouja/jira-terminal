@@ -101,9 +101,6 @@ describe('Util', function() {
         });
     });
     describe('#makeIssueLink', function() {
-        beforeEach(function(){
-            Util = require('../src/Util.js')({});
-        });
         it('Should give a pretty link with string as argument', function() {
             Util.makeIssueLink('TEST-1').should.equal('https://jira.awesome.com/browse/TEST-1');
         });

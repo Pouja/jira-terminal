@@ -17,7 +17,8 @@
     "prompt": "^0.2.14",
     "q": "^1.1.2",
     "shelljs": "^0.3.0",
-    "which": "^1.0.9"
+    "which": "^1.0.9",
+    "keytar": "~2.1.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -31,7 +32,8 @@
     "mocha": "^2.1.0",
     "should": "^4.6.5",
     "time-grunt": "^1.0.0",
-    "travis-cov": "^0.2.5"
+    "travis-cov": "^0.2.5",
+    "proxyquire": "~1.4.0"
   },
   "scripts": {
     "test": "grunt",

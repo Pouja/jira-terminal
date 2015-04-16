@@ -7,6 +7,7 @@ var editor = require('editor');
 var Q = require('q');
 var Config = require('./Config');
 var prompt = require('cli-prompt');
+var keytar = require('keytar');
 
 /**
 * A collection of utility functions.
@@ -39,16 +40,10 @@ var Util = function(argv) {
 
     /**
     * Asks the user for the password
-    * @return {Q}
+    * @return {String}
     */
     self.getPassword = function(){
-        var deferred = Q.defer();
-        if(argv.p){
-            deferred.resolve(argv.p);
-        } else {
-            prompt.password('password: ', deferred.resolve);
-        }
-        return deferred.promise;
+        return keytar.getPassword('jira-terminal', config.username);
     };
 
     /**

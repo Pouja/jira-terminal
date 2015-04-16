@@ -1,6 +1,7 @@
 var prompt = require('cli-prompt');
 var _ = require('lodash');
 var fs = require('fs');
+var keytar = require('keytar');
 
 /**
  * This will run on the first time.
@@ -12,7 +13,6 @@ module.exports.run = function(cb) {
         'host': 'jira.example.nl',
         'port': 443,
         'username': 'john.lee',
-        'password': 'secret',
         'git': {
             'default': 'master',
             'branchMaxLength': 50,
@@ -26,6 +26,7 @@ module.exports.run = function(cb) {
 
     console.log('You will be prompt to fill in some information.');
     console.log('These information are necessary to run the application.');
+    console.log('For the password, your key chain ring will be used to store and retrieve the password.');
 
     prompt.multi([{
         key: 'host',
@@ -34,7 +35,6 @@ module.exports.run = function(cb) {
         key: 'username'
     }, {
         key: 'password',
-        label: 'password (will be save as plain text, or leave it empty but you will be prompt for you password each time)',
         type: 'password'
     }, {
         key: 'path',
@@ -42,9 +42,13 @@ module.exports.run = function(cb) {
     }], function(answers) {
         var filename = 'jira-terminal-config.json';
 
+        keytar.addPassword('jira-terminal', answers.username, answers.password);
+
         var path = answers.path;
         path += (path[path.length - 1] === '/') ? filename : '/' + filename;
+
         delete answers.path;
+        delete answers.password;
 
         _.assign(config, answers);
 
