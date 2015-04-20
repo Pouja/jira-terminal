@@ -7,18 +7,18 @@
     "cli-prompt": "^0.4.1",
     "cli-table": "^0.3.1",
     "colors": "^1.0.3",
-    "config": "^1.10.0",
+    "config": "^1.12.0",
     "debug": "^2.1.1",
     "editor": "^0.1.0",
     "jira": "git://github.com/Pouja/node-jira#master",
+    "keytar": "~2.1.0",
     "lodash": "^3.0.1",
     "minimist": "^1.1.0",
     "moment": "^2.9.0",
     "prompt": "^0.2.14",
     "q": "^1.1.2",
     "shelljs": "^0.3.0",
-    "which": "^1.0.9",
-    "keytar": "~2.1.0"
+    "which": "^1.0.9"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -46,6 +46,7 @@
   "author": "http://www.github.com/Pouja/",
   "license": "MIT",
   "directories": {
+    "config": "config",
     "src": "src",
     "bin": "bin",
     "test": "test"

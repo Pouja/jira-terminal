@@ -1,3 +1,5 @@
+process.env.NODE_CONFIG_DIR = __dirname + '/../config';
+
 var which = require('which');
 var Config = require('./Config.js');
 var First = require('./First.js');
