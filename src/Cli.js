@@ -1,3 +1,4 @@
+// Necessary since the config package uses process.cwd()
 process.env.NODE_CONFIG_DIR = __dirname + '/../config';
 
 var which = require('which');
