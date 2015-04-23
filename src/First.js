@@ -46,7 +46,7 @@ module.exports.run = function(cb) {
         _.assign(config, answers);
 
         console.log('Writing the configuration file to ' + path);
-        fs.writeFileSync(path, JSON.stringify(answers), 'utf8');
+        fs.writeFileSync(path, JSON.stringify(config), 'utf8');
 
         console.log('Starting the app.');
         cb();
