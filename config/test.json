@@ -11,5 +11,7 @@
             "Story": "feature",
             "New Feature": "feature"
         }
-    }
+    },
+    "location": "/test/me/",
+    "config": "config.json"
 }
