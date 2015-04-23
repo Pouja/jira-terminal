@@ -50,6 +50,7 @@ module.exports = function(grunt) {
             test: {
                 options: {
                     reporter: 'spec',
+                    require: ['should']
                 },
                 src: ['coverage/test/**/*.js']
             },
@@ -75,5 +76,5 @@ module.exports = function(grunt) {
         },
     });
 
-    grunt.registerTask('default', ['env:test', 'jshint' ,'clean', 'blanket', 'copy', 'mochaTest']);
+    grunt.registerTask('default', ['env:test', 'jshint', 'clean', 'blanket', 'copy', 'mochaTest']);
 };

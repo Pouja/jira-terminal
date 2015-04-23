@@ -1,6 +1,5 @@
 var Util = require('../src/Util.js');
 var assert = require('assert');
-var should = require('should');
 var util;
 var argv = {};
 
