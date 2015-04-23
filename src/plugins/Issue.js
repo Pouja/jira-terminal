@@ -4,6 +4,7 @@ var Util = require('../Util.js')();
 var fs = require('fs');
 var which = require('which');
 var shell = require('shelljs');
+var bufferedPath = require('../Config.js').bufferedPath;
 
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
@@ -169,7 +170,6 @@ module.exports = function(jiraApi, argv) {
     */
     self.newHandler = function() {
         var deferred = Q.defer();
-        var filePath = __dirname + '/.BUFFERED_MESSAGE';
 
         if (!argv.p || !argv.t) {
             Util.error('Incorrect usage of \'issue new\', see \'issue help\'for more information.');
@@ -188,10 +188,10 @@ module.exports = function(jiraApi, argv) {
             }
         };
 
-        fs.writeFileSync(filePath, generateMessage(issue), 'utf8');
-        Util.openEditor(filePath)
+        fs.writeFileSync(bufferedPath, generateMessage(issue), 'utf8');
+        Util.openEditor(bufferedPath)
             .then(function() {
-                var message = fs.readFileSync(filePath, 'utf8').replace(/\n#.*/g, '');
+                var message = fs.readFileSync(bufferedPath, 'utf8').replace(/\n#.*/g, '');
 
                 if (message.trim() === '') {
                     throw 'The body was empty, the submit was aborted.';

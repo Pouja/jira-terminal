@@ -1,3 +1,5 @@
 {
-    "location": ".config/jira-terminal.json"
+    "location": ".config/jira-terminal/",
+    "config":"config.json",
+    "buffer":".BUFFERED_MESSAGE"
 }

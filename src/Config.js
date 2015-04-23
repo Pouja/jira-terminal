@@ -9,7 +9,7 @@ var load = function() {
     if (process.env.NODE_ENV === 'test') {
         return config;
     }
-    return JSON.parse(fs.readFileSync(home + '/' + config.location, 'utf8'));
+    return JSON.parse(fs.readFileSync(home + '/' + config.location + config.config, 'utf8'));
 };
 
 /**
@@ -17,7 +17,7 @@ var load = function() {
 */
 var isReadAble = function() {
     try {
-        JSON.parse(fs.readFileSync(home + '/' + config.location, 'utf8'));
+        JSON.parse(fs.readFileSync(home + '/' + config.location + config.config, 'utf8'));
     } catch (error) {
         if (error.code !== 'ENOENT') {
             throw error;
@@ -29,3 +29,4 @@ var isReadAble = function() {
 
 module.exports.exists = isReadAble;
 module.exports.load = load;
+module.exports.bufferedPath = home + '/' + config.location + config.buffer;

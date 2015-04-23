@@ -3,7 +3,8 @@ var _ = require('lodash');
 var fs = require('fs');
 var keytar = require('keytar');
 var home = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-var path = home + '/' + require('config').location;
+var basePath = home + '/' + require('config').location;
+var configPath = basePath + require('config').config;
 
 /**
  * This will run on the first time.
@@ -45,8 +46,9 @@ module.exports.run = function(cb) {
 
         _.assign(config, answers);
 
-        console.log('Writing the configuration file to ' + path);
-        fs.writeFileSync(path, JSON.stringify(config), 'utf8');
+        console.log('Writing the configuration file to ' + configPath);
+        fs.mkdirSync(basePath);
+        fs.writeFileSync(configPath, JSON.stringify(config), 'utf8');
 
         console.log('Starting the app.');
         cb();

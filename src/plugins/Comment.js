@@ -3,6 +3,7 @@ var Util = require('../Util.js')();
 var _ = require('lodash');
 var moment = require('moment');
 var fs = require('fs');
+var bufferedPath = require('../Config.js').bufferedPath;
 
 module.exports = function(jiraApi, argv) {
     // This is done in such a way, so that we can test this.
@@ -99,7 +100,6 @@ module.exports = function(jiraApi, argv) {
      * @return {Q}
      */
     self.add = function() {
-        var filePath = __dirname + '/.BUFFERED_MESSAGE';
         var id = argv.i || argv._[2];
         var deferred = Q.defer();
 
@@ -111,14 +111,14 @@ module.exports = function(jiraApi, argv) {
         // Write file with generated comments
         generateBufferedMessage(id)
             .then(function(bufferedMessage) {
-                fs.writeFileSync(filePath, bufferedMessage, 'utf8');
+                fs.writeFileSync(bufferedPath, bufferedMessage, 'utf8');
 
                 // Let the user write his comment
-                return Util.openEditor(filePath);
+                return Util.openEditor(bufferedPath);
             })
             .then(function() {
                 // Retrieve the comment
-                var message = fs.readFileSync(filePath, 'utf8').replace(/\n#.*/g, '');
+                var message = fs.readFileSync(bufferedPath, 'utf8').replace(/\n#.*/g, '');
 
                 if (message.trim() === '') {
                     Util.log('The body was empty, the submit was aborted.');
