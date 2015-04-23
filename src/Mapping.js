@@ -75,8 +75,6 @@ var set = function(map) {
             } else if (field.type === 'special') {
                 fields[value.key] = {};
                 fields[value.key][field.path] = value.value;
-            } else {
-                fields[value.key] = value.value;
             }
         } else {
             throw 'Unknown key ' + value.key + ' specified in Mapping.js:set.';
