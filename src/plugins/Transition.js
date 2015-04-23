@@ -24,7 +24,7 @@ module.exports = function(jiraApi, argv) {
      */
     self.hook = function() {
         if (argv._[1] === 'help') {
-            return self.help();
+            return self.usages();
         } else if (argv._.length === 2) {
             return self.transitions();
         } else if (argv._.length === 3) {
