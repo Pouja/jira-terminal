@@ -222,7 +222,7 @@ var Util = function(argv) {
     self.openEditor = function(filePath) {
         var deffered = Q.defer();
         editor(filePath, function(code){
-            if(code !== null || code !== undefined){
+            if(code !== null && code !== undefined){
                 deffered.resolve();
             } else {
                 deffered.reject();

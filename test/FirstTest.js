@@ -37,7 +37,7 @@ describe('First', function() {
             fsStub.mkdirSync.calledWith(home + '/' + config.location).should.be.ok;
             keytarStub.addPassword.calledWith('jira-terminal', 'test.me', 'secret').should.be.ok;
             fsStub.writeFileSync.calledWith(home + '/' + config.location + config.config).should.be.ok;
-            fsStub.writeFileSync.calledWith(sinon.match.any,sinon.match.has('password')).should.fail;
+            fsStub.writeFileSync.calledWith(sinon.match.any, sinon.match.has('password')).should.fail;
         });
     });
 });

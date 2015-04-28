@@ -1,7 +1,8 @@
-var Util = require('../src/Util.js');
 var assert = require('assert');
+var proxyquire = require('proxyquire').noPreserveCache();
 var util;
 var argv = {};
+var Util = require('../src/Util.js');
 
 describe('Util', function() {
     beforeEach(function() {
@@ -41,8 +42,45 @@ describe('Util', function() {
         });
     });
     describe('#openEditor', function() {
-        it('todo', function() {
-            assert(false);
+        var filepath = '/path/to/test';
+        it('should resolve when code is not null nor undefined', function(done) {
+            var proxy = {
+                editor: function(path, cb) {
+                    path.should.equal(filepath);
+                    cb(1);
+                }
+            };
+
+            proxyquire('../src/Util.js', proxy)({}).openEditor(filepath)
+                .then(done, function() {
+                    done('should not fail.');
+                }).done();
+        });
+        it('should reject when code is null', function(done) {
+            var proxy = {
+                editor: function(path, cb) {
+                    path.should.equal(filepath);
+                    cb(null);
+                }
+            };
+
+            proxyquire('../src/Util.js', proxy)({}).openEditor(filepath)
+                .then(function() {
+                    done('should fail');
+                }, done).done();
+        });
+        it('should reject when code is null', function(done) {
+            var proxy = {
+                editor: function(path, cb) {
+                    path.should.equal(filepath);
+                    cb();
+                }
+            };
+
+            proxyquire('../src/Util.js', proxy)({}).openEditor(filepath)
+                .then(function() {
+                    done('should fail');
+                }, done).done();
         });
     });
     describe('#setLinebreaks', function() {
@@ -110,7 +148,7 @@ describe('Util', function() {
                 ]
             };
             util._sort(table, 'column1');
-            should.deepEqual(table.rows[0], ['r1c1', 'r1c2']);
+            assert.deepEqual(table.rows[0], ['r1c1', 'r1c2']);
         });
     });
     describe('#makeIssueLink', function() {
@@ -129,8 +167,29 @@ describe('Util', function() {
         });
     });
     describe('#makeVerticalRows', function() {
-        it('todo', function() {
-            assert(false);
+        it('should make a correct vertical row', function() {
+            var map = [{
+                name: 'summary',
+                key: 'notexists.summary'
+            }, {
+                name: 'link',
+                issueLink: true
+            },{
+                name: 'long story',
+                key: 'deep.story',
+                linebreaks: true,
+                emptySpace: 10
+            }];
+            var data = {
+                deep: {
+                    story: 'a very long story',
+                },
+                key:'test-1'
+            };
+            var result = util.makeVerticalRows(map, data);
+            result.should.have.lengthOf(2);
+            result[0].should.have.property('link').with.equal('https://jira.awesome.com/browse/test-1');
+            result[1].should.have.property('long story').with.equal('a very long story ');
         });
     });
     describe('#branch', function() {
