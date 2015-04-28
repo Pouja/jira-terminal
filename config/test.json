@@ -12,6 +12,6 @@
             "New Feature": "feature"
         }
     },
-    "location": "/test/me/",
+    "location": "test/me/",
     "config": "config.json"
 }
