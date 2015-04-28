@@ -3,7 +3,6 @@ var CommentConstr = require('../../src/plugins/Comment.js');
 var comment;
 var argv;
 var jiraApi;
-var assert = require('assert');
 
 describe('plugin:comment', function() {
     describe('#hook', function() {
@@ -46,10 +45,8 @@ describe('plugin:comment', function() {
     });
     describe('#show', function() {
         it('Should fail when no issue was found matching the id', function() {
-            assert(true);
         });
         it('should succeed', function() {
-            assert(true);
         });
     });
 });

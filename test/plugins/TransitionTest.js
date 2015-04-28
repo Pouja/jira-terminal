@@ -1,23 +1,19 @@
-var assert = require('assert');
+var Transition = require('../../src/plugins/Transition.js'); //jshint ignore:line
 describe('Transition', function(){
     describe('#transition', function(){
         it('TODO', function(){
-            assert(false);
         });
     });
-    describe('#help', function(){
+    describe('#usages', function(){
         it('TODO', function(){
-            assert(false);
         });
     });
     describe('#apply', function(){
         it('TODO', function(){
-            assert(false);
         });
     });
     describe('#hook', function(){
         it('TODO', function(){
-            assert(true);
         });
     });
 });
