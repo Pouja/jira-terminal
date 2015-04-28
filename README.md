@@ -14,5 +14,14 @@ First time running it will promp you with some information to create a config fi
 # How to use it
 All the plugins have the `help` commands, IE `jira-terminal issue help`. This also shows what is already implemented.
 
+# Screenshots
+Here are some screenshots of the application.
+![help](screenshots/helps.png)
+
+Here is an example of applying a transition and branch & checkout of the issue:
+![transition](screenshots/transition.png)
+
+Under [screenshots](screenshots/) you can find more.
+
 # Licence 
 MIT
