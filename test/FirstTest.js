@@ -17,38 +17,27 @@ var First = proxyquire('../src/First.js', {
     keytar: keytarStub,
     fs: fsStub
 });
+var sinon = require('sinon');
 
 describe('First', function() {
-    // Disable console.log
-    var log = console.log;
-    console.log = function() {};
-    after(function() {
-        console.log = log;
-    });
-
     describe('#run', function() {
-        it('Should call keytar and fs correctly', function(done) {
+        it('Should call keytar and fs correctly', function() {
             promptStub.multi = function(questions, cb) {
-                questions.should.have.lengthOf(3);
                 cb({
                     username: 'test.me',
                     password: 'secret',
                     host: 'example.com'
                 });
             };
-            fsStub.mkdirSync = function(dir){
-                dir.should.be.equal(home + '/' + config.location);
-            };
-            fsStub.writeFileSync = function(path, file) {
-                path.should.be.equal(home + '/' + config.location + config.config);
-                file.should.not.have.property('password');
-            };
-            keytarStub.addPassword = function(profile, username, password){
-                profile.should.be.equal('jira-terminal');
-                password.should.be.equal('secret');
-                username.should.be.equal('test.me');
-            };
-            First.run(done);
+            fsStub.mkdirSync = sinon.spy();
+            fsStub.writeFileSync = sinon.spy();
+            keytarStub.addPassword = sinon.spy();
+            First.run(function() {});
+
+            fsStub.mkdirSync.calledWith(home + '/' + config.location).should.be.ok;
+            keytarStub.addPassword.calledWith('jira-terminal', 'test.me', 'secret').should.be.ok;
+            fsStub.writeFileSync.calledWith(home + '/' + config.location + config.config).should.be.ok;
+            fsStub.writeFileSync.calledWith(sinon.match.any,sinon.match.has('password')).should.fail;
         });
     });
 });
