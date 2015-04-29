@@ -1,4 +1,4 @@
-# Jira Terminal
+# Jira Terminal [![Build Status](https://travis-ci.org/Pouja/jira-terminal.svg?branch=master)](https://travis-ci.org/Pouja/jira-terminal)
 Let's go away from that ugly GUI of jira and lets just stick to our terminals.  
 I  started/created this project to improve my work flow. I was already using git, npm, grunt, bower ... etc. in my terminal, I wanted to use JIRA as well in my terminal.
 
