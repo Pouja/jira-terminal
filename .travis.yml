@@ -3,3 +3,4 @@ node_js:
   - stable
 before_install:
   - sudo apt-get install libgnome-keyring-dev
+  - npm install -g grunt-cli
