@@ -69,7 +69,7 @@ module.exports = function(jiraApi, argv) {
                 rows: []
             };
             table.rows = _.map(result.issues, function(issue) {
-                var components = _.pluck(issue.fields.components, 'name').join(',');
+                var components = _.map(issue.fields.components, 'name').join(',');
                 var assignee = (issue.fields.assignee) ? issue.fields.assignee.name : 'None';
                 return [
                     issue.key,
